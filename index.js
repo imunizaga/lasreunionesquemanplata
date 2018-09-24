@@ -60,8 +60,10 @@ function startTimer(duration, display) {
 
 function setImage() {
   ajax_get(api_url, function(data) {
-    var html = '<img src="' + data[0]["url"] + '">';
-    document.getElementById("image-wrapper").innerHTML = html;
+    var style = 'url(' + data[0]["url"] + ')';
+    document.getElementById("image-wrapper").style.backgroundImage = (
+      'url(' + data[0]["url"] + ')'
+    );
   });
 }
 
