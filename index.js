@@ -82,9 +82,9 @@ function startTimer(minutesDuration, display) {
 function setImage() {
   ajax_get(api_url, function(data) {
     var style = 'url(' + data[0]["url"] + ')';
-    document.getElementById("image-wrapper").style.backgroundImage = (
-      'url(' + data[0]["url"] + ')'
-    );
+    document.querySelectorAll(".image-background").forEach(function(el) {
+      el.style.backgroundImage = 'url(' + data[0]["url"] + ')';
+    });
   });
 }
 
