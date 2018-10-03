@@ -37,25 +37,46 @@ api_url += "mime_type=jpg,png"// just static imagrs
 // api_url += "YOUR-API-KEY"
 
 
-function startTimer(duration, display) {
-  var timer = duration, minutes, seconds;
-  setInterval(function () {
-    minutes = parseInt(timer / 60, 10)
-    seconds = parseInt(timer % 60, 10);
+function startTimer(minutesDuration, display) {
+  var countDownDate = new Date((new Date()).getTime() + minutesDuration * 60000);
 
-    if (seconds == 0) {
+  function updateTimer() {
+    // Get todays date and time
+    var now = new Date();
+
+    // Find the distance between now and the count down date
+    var milliseconds = countDownDate - now;
+
+    // Time calculations for days, hours, minutes and seconds
+    var days = Math.floor(milliseconds / (1000 * 60 * 60 * 24));
+    var hours = Math.floor((milliseconds % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60));
+    var minutes = Math.floor((milliseconds % (1000 * 60 * 60)) / (1000 * 60));
+    var seconds = Math.floor((milliseconds % (1000 * 60)) / 1000);
+
+    if (seconds == 0 || !document.getElementById("image-wrapper").style.backgroundImage) {
       setImage();
     }
 
-    minutes = minutes < 10 ? "0" + minutes : minutes;
-    seconds = seconds < 10 ? "0" + seconds : seconds;
+    text = '';
 
-    display.textContent = minutes + ":" + seconds;
-
-    if (--timer < 0) {
-      timer = duration;
+    if (days) {
+      text = days + "d ";
     }
-  }, 1000);
+
+    if (hours) {
+      text += hours + "h ";
+    }
+    // Display the result in the element with id="demo"
+    display.innerHTML = text + minutes + "m " + seconds + "s ";
+
+    // If the count down is finished, write some text
+    if (milliseconds < 0) {
+      clearInterval(x);
+      display.innerHTML = "00:00";
+    }
+  }
+  updateTimer();
+  setInterval(updateTimer, 500);
 }
 
 function setImage() {
@@ -77,7 +98,5 @@ window.onload = function () {
     }
   }
 
-  var seconds = 60 * minutes,
-    display = document.querySelector('#timer');
-  startTimer(seconds, display);
+  startTimer(minutes, document.querySelector('#timer'));
 };
