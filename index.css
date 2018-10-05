@@ -13,6 +13,22 @@ html, body {
     padding: 0;
     width: 100%;
     height: 100%;
+    font-family: 'Indie Flower', cursive;
+}
+
+body {
+    background-size: contain;
+    background-repeat: no-repeat;
+    background-color: transparent;
+    background-position: center;
+}
+
+body.dog {
+    background-image: url('img/dog.svg');
+}
+
+body.cat {
+    background-image: url('img/cat.svg');
 }
 
 .image-background {
@@ -28,6 +44,7 @@ html, body {
 
 #image-wrapper {
     background-size: cover;
+    box-shadow:         inset 0 0 10px white;
 
     /* Add the blur effect */
     filter: blur(8px);
@@ -37,4 +54,33 @@ html, body {
 #image {
     background-repeat: no-repeat;
     background-size: contain;
+}
+
+.btn {
+    height: 5vw;
+    width: 5vw;
+    border: 0px;
+    position: absolute;
+    bottom: 0px;
+    right: 0px;
+    background-size: contain;
+    background-repeat: no-repeat;
+    background-color: transparent;
+    display: none;
+}
+
+body.dog .btn-cat{
+    display: inline;
+}
+
+body.cat .btn-dog{
+    display: inline;
+}
+
+.btn.btn-dog {
+    background-image: url('img/dog.svg');
+}
+
+.btn.btn-cat {
+    background-image: url('img/cat.svg');
 }

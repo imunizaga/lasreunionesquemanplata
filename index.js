@@ -18,23 +18,23 @@ function ajax_get(url, callback) {
 }
 
 // ---- Cats
-var api_url = 'https://api.thecatapi.com/v1/images/search?'
+var apiUrl = 'https://api.thecatapi.com/v1/images/search?'
 
 // ---- Dogs
-//var api_url = 'https://api.thedogapi.com/v1/images/search?'
+//var apiUrl = 'https://api.thedogapi.com/v1/images/search?'
 
 // -- sizes
-//api_url += "size=full&" // full size
-// api_url += "size=med&" // medium size
-//api_url += "size=small&" // small size
+//apiUrl += "size=full&" // full size
+// apiUrl += "size=med&" // medium size
+//apiUrl += "size=small&" // small size
 
 
 // -- formats
-api_url += "mime_type=jpg,png"// just static imagrs
-//api_url += "mime_types=gif"// just gifs
+apiUrl += "mime_type=jpg,png"// just static imagrs
+//apiUrl += "mime_types=gif"// just gifs
 
 // Add your API-Key to have access to all the images in the platform, not just the demo ones
-// api_url += "YOUR-API-KEY"
+// apiUrl += "YOUR-API-KEY"
 
 
 function startTimer(minutesDuration, display) {
@@ -80,13 +80,15 @@ function startTimer(minutesDuration, display) {
 }
 
 function setImage() {
-  ajax_get(api_url, function(data) {
+  ajax_get(apiUrl, function(data) {
     var style = 'url(' + data[0]["url"] + ')';
     document.querySelectorAll(".image-background").forEach(function(el) {
       el.style.backgroundImage = 'url(' + data[0]["url"] + ')';
     });
   });
 }
+
+document.getElement
 
 window.onload = function () {
   var minutes;
@@ -99,4 +101,18 @@ window.onload = function () {
   }
 
   startTimer(minutes, document.querySelector('#timer'));
+
+  document.querySelectorAll('.btn').forEach(function(e) {
+    e.onclick = function() {
+      if (this.className.includes('dog')) {
+        document.querySelector('body').className = 'dog';
+        apiUrl = apiUrl.replace('cat', 'dog');
+      } else {
+        this.className = 'btn btn-cat';
+        document.querySelector('body').className = 'cat';
+        apiUrl = apiUrl.replace('dog', 'cat');
+      }
+      setImage();
+    }
+  })
 };
