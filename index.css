@@ -84,3 +84,7 @@ body.cat .btn-dog{
 .btn.btn-cat {
     background-image: url('img/cat.svg');
 }
+
+div#preload { 
+    display: none; 
+}

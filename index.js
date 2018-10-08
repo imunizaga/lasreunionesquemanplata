@@ -36,6 +36,7 @@ apiUrl += "mime_type=jpg,png"// just static imagrs
 // Add your API-Key to have access to all the images in the platform, not just the demo ones
 // apiUrl += "YOUR-API-KEY"
 
+var loading = false;
 
 function startTimer(minutesDuration, display) {
   var countDownDate = new Date((new Date()).getTime() + minutesDuration * 60000);
@@ -52,6 +53,10 @@ function startTimer(minutesDuration, display) {
     var hours = Math.floor((milliseconds % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60));
     var minutes = Math.floor((milliseconds % (1000 * 60 * 60)) / (1000 * 60));
     var seconds = Math.floor((milliseconds % (1000 * 60)) / 1000);
+
+    if (seconds == 55 || !document.querySelector("img").src) {
+      preloadImage();
+    }
 
     if (seconds == 0 || !document.getElementById("image-wrapper").style.backgroundImage) {
       setImage();
@@ -79,16 +84,38 @@ function startTimer(minutesDuration, display) {
   setInterval(updateTimer, 500);
 }
 
-function setImage() {
+function preloadImage() {
+  if (loading) {
+    return
+  }
+  loading = true;
+
   ajax_get(apiUrl, function(data) {
-    var style = 'url(' + data[0]["url"] + ')';
-    document.querySelectorAll(".image-background").forEach(function(el) {
-      el.style.backgroundImage = 'url(' + data[0]["url"] + ')';
-    });
+    loading = false;
+    document.querySelector("img").src = data[0]["url"];
+    var img = document.querySelector('img');
+
+    if (!img.src) {
+      var style = 'url(' + img.src + ')';
+      document.querySelectorAll(".image-background").forEach(function(el) {
+        el.style.backgroundImage = style;
+      });
+    }
   });
 }
 
-document.getElement
+function setImage() {
+  var img = document.querySelector('img');
+
+  if (img.src) {
+    var style = 'url(' + img.src + ')';
+    document.querySelectorAll(".image-background").forEach(function(el) {
+      el.style.backgroundImage = style;
+    });
+  }
+}
+
+preloadImage();
 
 window.onload = function () {
   var minutes;
