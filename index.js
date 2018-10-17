@@ -23,6 +23,9 @@ var apiUrl = 'https://api.thecatapi.com/v1/images/search?'
 // ---- Dogs
 //var apiUrl = 'https://api.thedogapi.com/v1/images/search?'
 
+// ---- sizes
+// http://api.giphy.com/v1/gifs/search?api_key=VK7vgk34YgkHXmVaozKWk55AR4uDZ3wH&q=money
+
 // -- sizes
 //apiUrl += "size=full&" // full size
 // apiUrl += "size=med&" // medium size
@@ -92,10 +95,12 @@ function preloadImage() {
 
   ajax_get(apiUrl, function(data) {
     loading = false;
-    document.querySelector("img").src = data[0]["url"];
+
     var img = document.querySelector('img');
 
     if (!img.src) {
+      document.querySelector("img").src = data[0]["url"];
+
       var style = 'url(' + img.src + ')';
       document.querySelectorAll(".image-background").forEach(function(el) {
         el.style.backgroundImage = style;
@@ -139,7 +144,11 @@ window.onload = function () {
         document.querySelector('body').className = 'cat';
         apiUrl = apiUrl.replace('dog', 'cat');
       }
-      setImage();
+      document.querySelectorAll(".image-background").forEach(function(el) {
+        el.style.backgroundImage = '';
+      });
+      document.querySelector('img').removeAttribute("src");
+      preloadImage();
     }
   })
 };
