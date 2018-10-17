@@ -40,6 +40,7 @@ apiUrl += "mime_type=jpg,png"// just static imagrs
 // apiUrl += "YOUR-API-KEY"
 
 var loading = false;
+var nextImageUrl;
 
 function startTimer(minutesDuration, display) {
   var countDownDate = new Date((new Date()).getTime() + minutesDuration * 60000);
@@ -106,24 +107,27 @@ function preloadImage() {
   ajax_get(apiUrl, function(data) {
     loading = false;
 
+    nextImageUrl = data[0]["url"];
+
     var img = document.querySelector('img');
 
     if (!img.src) {
-      document.querySelector("img").src = data[0]["url"];
-
-      var style = 'url(' + img.src + ')';
+      var style = 'url(' + nextImageUrl + ')';
       document.querySelectorAll(".image-background").forEach(function(el) {
         el.style.backgroundImage = style;
       });
     }
+
+    document.querySelector("img").src = nextImageUrl;
+
   });
 }
 
 function setImage() {
   var img = document.querySelector('img');
 
-  if (img.src) {
-    var style = 'url(' + img.src + ')';
+  if (nextImageUrl) {
+    var style = 'url(' + nextImageUrl + ')';
     document.querySelectorAll(".image-background").forEach(function(el) {
       el.style.backgroundImage = style;
     });
