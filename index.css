@@ -67,6 +67,7 @@ body.cat {
     background-repeat: no-repeat;
     background-color: transparent;
     display: none;
+    margin: 10px;
 }
 
 body.dog .btn-cat{
