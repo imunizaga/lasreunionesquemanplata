@@ -41,61 +41,66 @@ apiUrl += "mime_type=jpg,png"// just static imagrs
 
 var loading = false;
 var nextImageUrl;
+var countDownDate;
+var display;
+var interval;
 
-function startTimer(minutesDuration, display) {
-  var countDownDate = new Date((new Date()).getTime() + minutesDuration * 60000);
 
-  function updateTimer() {
-    // Get todays date and time
-    var now = new Date();
+function updateTimer() {
+  // Get todays date and time
+  var now = new Date();
 
-    // Find the distance between now and the count down date
-    var milliseconds = countDownDate - now;
+  // Find the distance between now and the count down date
+  var milliseconds = countDownDate - now;
 
-    // If the count down is finished, write some text
-    if (milliseconds < 0) {
-      clearInterval(interval);
-      if (apiUrl.includes('dog')) {
-        display.innerHTML = 'Guau!';
-      } else {
-        display.innerHTML = 'Miau!';
-      }
-      return;
+  // If the count down is finished, write some text
+  if (milliseconds < 0) {
+    clearInterval(interval);
+    if (apiUrl.includes('dog')) {
+      display.innerHTML = 'Guau!';
+    } else {
+      display.innerHTML = 'Miau!';
     }
-
-    // Time calculations for days, hours, minutes and seconds
-    var days = Math.floor(milliseconds / (1000 * 60 * 60 * 24));
-    var hours = Math.floor((milliseconds % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60));
-    var minutes = Math.floor((milliseconds % (1000 * 60 * 60)) / (1000 * 60));
-    var seconds = Math.floor((milliseconds % (1000 * 60)) / 1000);
-
-    if (seconds == 55 || !document.querySelector("img").src) {
-      preloadImage();
-    }
-
-    if (seconds == 0 || !document.getElementById("image-wrapper").style.backgroundImage) {
-      setImage();
-    }
-
-    text = '';
-
-    if (days) {
-      text = days + "d ";
-    }
-
-    if (hours) {
-      text += hours + "h ";
-    }
-
-    // Display the result in the element with id="demo"
-    if (minutes) {
-      text += minutes + "m ";
-    }
-    // Display the result in the element with id="demo"
-    display.innerHTML = text + seconds + "s ";
+    return;
   }
+
+  // Time calculations for days, hours, minutes and seconds
+  var days = Math.floor(milliseconds / (1000 * 60 * 60 * 24));
+  var hours = Math.floor((milliseconds % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60));
+  var minutes = Math.floor((milliseconds % (1000 * 60 * 60)) / (1000 * 60));
+  var seconds = Math.floor((milliseconds % (1000 * 60)) / 1000);
+
+  if (seconds == 55 || !document.querySelector("img").src) {
+    preloadImage();
+  }
+
+  if (seconds == 0 || !document.getElementById("image-wrapper").style.backgroundImage) {
+    setImage();
+  }
+
+  text = '';
+
+  if (days) {
+    text = days + "d ";
+  }
+
+  if (hours) {
+    text += hours + "h ";
+  }
+
+  // Display the result in the element with id="demo"
+  if (minutes) {
+    text += minutes + "m ";
+  }
+  // Display the result in the element with id="demo"
+  display.innerHTML = text + seconds + "s ";
+}
+
+function startTimer(minutesDuration) {
+  countDownDate = new Date((new Date()).getTime() + minutesDuration * 60000);
+
   updateTimer();
-  var interval = setInterval(updateTimer, 500);
+  interval = setInterval(updateTimer, 500);
 }
 
 function preloadImage() {
@@ -116,6 +121,7 @@ function preloadImage() {
       document.querySelectorAll(".image-background").forEach(function(el) {
         el.style.backgroundImage = style;
       });
+      updateTimer();
     }
 
     document.querySelector("img").src = nextImageUrl;
@@ -146,7 +152,8 @@ window.onload = function () {
     }
   }
 
-  startTimer(minutes, document.querySelector('#timer'));
+  display = document.querySelector('#timer');
+  startTimer(minutes);
 
   document.querySelectorAll('.btn').forEach(function(e) {
     e.onclick = function() {
