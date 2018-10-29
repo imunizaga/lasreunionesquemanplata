@@ -1,7 +1,13 @@
-#timer {
-    position: absolute;
-    top: 40%;
+.timer-wrapper {
+    display: flex; /* or inline-flex */
+    flex-direction: column;
+    justify-content: center;
     width: 100%;
+    position: absolute;
+    height: 100%;
+}
+
+#timer {
     text-align: center;
     color: white;
     font-size: 20vh;
