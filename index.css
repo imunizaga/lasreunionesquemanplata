@@ -65,6 +65,8 @@ body.cat {
 .btn {
     height: 5vw;
     width: 5vw;
+    min-height: 100px;
+    min-width: 100px;
     border: 0px;
     position: absolute;
     bottom: 0px;
