@@ -165,6 +165,7 @@ window.onload = function () {
         document.querySelector('body').className = 'cat';
         apiUrl = apiUrl.replace('dog', 'cat');
       }
+      nextImageUrl = null;
       document.querySelectorAll(".image-background").forEach(function(el) {
         el.style.backgroundImage = '';
       });
