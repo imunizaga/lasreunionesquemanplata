@@ -164,33 +164,6 @@ function start(minutes) {
   isPaused = false;
   display = document.querySelector('#timer');
   startTimer(minutes);
-
-  document.querySelectorAll('.btn').forEach(function(e) {
-    e.onclick = function() {
-      if (this.className.includes('play')) {
-        this.className = this.className.replace('play', 'pause');
-        return play();
-      } else if (this.className.includes('pause')) {
-        this.className = this.className.replace('pause', 'play');
-        return pause();
-      }
-
-      if (this.className.includes('dog')) {
-        document.querySelector('body').className = 'dog';
-        apiUrl = apiUrl.replace('cat', 'dog');
-      } else {
-        this.className = 'btn btn-cat';
-        document.querySelector('body').className = 'cat';
-        apiUrl = apiUrl.replace('dog', 'cat');
-      }
-      nextImageUrl = null;
-      document.querySelectorAll(".image-background").forEach(function(el) {
-        el.style.backgroundImage = '';
-      });
-      document.querySelector('img').removeAttribute("src");
-      preloadImage();
-    }
-  })
 }
 
 window.onload = function () {
@@ -233,4 +206,33 @@ window.onload = function () {
     }
 
   }
+
+  document.querySelectorAll('.btn').forEach(function(e) {
+    e.onclick = function() {
+      if (this.className.includes('play')) {
+        this.className = this.className.replace('play', 'pause');
+        return play();
+      } else if (this.className.includes('pause')) {
+        this.className = this.className.replace('pause', 'play');
+        return pause();
+      }
+
+      if (this.className.includes('dog')) {
+        document.querySelector('body').classList.remove('cat');
+        document.querySelector('body').classList.add('dog');
+        apiUrl = apiUrl.replace('cat', 'dog');
+      } else {
+        this.className = 'btn btn-cat';
+        document.querySelector('body').classList.remove('dog')
+        document.querySelector('body').classList.add('cat')
+        apiUrl = apiUrl.replace('dog', 'cat');
+      }
+      nextImageUrl = null;
+      document.querySelectorAll(".image-background").forEach(function(el) {
+        el.style.backgroundImage = '';
+      });
+      document.querySelector('img').removeAttribute("src");
+      preloadImage();
+    }
+  });
 };

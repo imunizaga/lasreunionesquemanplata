@@ -147,6 +147,7 @@ body.not-started .form-container{
     background-repeat: no-repeat;
     background-color: transparent;
     margin: 10px;
+    z-index: 100;
 }
 
 .btn-cat, .btn-dog{
@@ -161,7 +162,7 @@ body.cat .btn-dog{
     display: inline;
 }
 
-body.not-started button.btn{
+.not-started .btn{
     display: none
 }
 
