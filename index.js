@@ -44,9 +44,15 @@ var nextImageUrl;
 var countDownDate;
 var display;
 var interval;
+var isPaused = false;
+var pauseTime = null;
 
 
 function updateTimer() {
+  if (isPaused) {
+    return;
+  }
+
   // Get todays date and time
   var now = new Date();
 
@@ -140,6 +146,20 @@ function setImage() {
   }
 }
 
+function pause() {
+  isPaused = true;
+  pauseTime = new Date();
+}
+
+function play() {
+  isPaused = false;
+
+  var now = new Date();
+
+  d = now - pauseTime;
+  countDownDate.setTime(countDownDate.getTime() + d);
+}
+
 preloadImage();
 
 window.onload = function () {
@@ -157,6 +177,14 @@ window.onload = function () {
 
   document.querySelectorAll('.btn').forEach(function(e) {
     e.onclick = function() {
+      if (this.className.includes('play')) {
+        this.className = this.className.replace('play', 'pause');
+        return play();
+      } else if (this.className.includes('pause')) {
+        this.className = this.className.replace('pause', 'play');
+        return pause();
+      }
+
       if (this.className.includes('dog')) {
         document.querySelector('body').className = 'dog';
         apiUrl = apiUrl.replace('cat', 'dog');

@@ -73,8 +73,6 @@ body.cat {
 .btn {
     height: 5vw;
     width: 5vw;
-    min-height: 100px;
-    min-width: 100px;
     border: 0px;
     position: absolute;
     bottom: 0px;
@@ -82,8 +80,11 @@ body.cat {
     background-size: contain;
     background-repeat: no-repeat;
     background-color: transparent;
-    display: none;
     margin: 10px;
+}
+
+.btn-cat, .btn-dog{
+    display: none;
 }
 
 body.dog .btn-cat{
@@ -102,6 +103,36 @@ body.cat .btn-dog{
     background-image: url('img/cat.svg');
 }
 
+.btn.btn-play {
+    background-image: url('img/play.svg');
+    right: 6vw;
+    background-color: white;
+    border-radius: 50%;
+}
+
+.btn.btn-pause {
+    background-image: url('img/pause.svg');
+    right: 6vw;
+    background-color: white;
+    border-radius: 50%;
+}
+
+@media only screen and (max-width: 990px) {
+    .btn {
+        height: 10vw;
+        width: 10vw;
+    }
+
+    .btn.btn-play, .btn.btn-pause {
+        right: 12vw;
+    }
+}
+
 div#preload { 
     display: none; 
+}
+
+.btn {
+    -webkit-filter: drop-shadow( 0px 0px 3px white);
+    filter: drop-shadow( 0px 0px 3px white);
 }
