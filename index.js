@@ -177,6 +177,10 @@ window.onload = function () {
   input.onkeyup = function() {
     var minutes = this.value.trim();
 
+    if (arguments[0].keyCode == 13) {
+      onSubmit();
+    }
+
     if (input.value != '') {
       try {
         minutes = parseInt(minutes);
@@ -189,7 +193,7 @@ window.onload = function () {
     }
   }
 
-  button.onclick = function() {
+  function onSubmit() {
     var minutes = input.value.trim();
 
     if (minutes == '') {
@@ -206,6 +210,8 @@ window.onload = function () {
     }
 
   }
+
+  button.onclick = onSubmit;
 
   document.querySelectorAll('.btn').forEach(function(e) {
     e.onclick = function() {
