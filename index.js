@@ -199,6 +199,7 @@ window.onload = function () {
   var input = document.querySelector(".form-container input");
   var button = document.querySelector(".form-container button");
   var em = document.querySelector(".form-container em");
+  input.focus();
 
   input.onkeyup = function() {
     var minutes = this.value.trim();
