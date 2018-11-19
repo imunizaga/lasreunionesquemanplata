@@ -73,6 +73,7 @@ body.not-started .form-container{
 
 .form-container label{
     color: white;
+    font-size: 1.5em;
 }
 
 .form-container input{
