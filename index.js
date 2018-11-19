@@ -44,7 +44,7 @@ var nextImageUrl;
 var countDownDate;
 var display;
 var interval;
-var isPaused = false;
+var isPaused = true;
 var pauseTime = null;
 
 
@@ -122,7 +122,7 @@ function preloadImage() {
 
     var img = document.querySelector('img');
 
-    if (!img.src) {
+    if (!img.src && !isPaused) {
       var style = 'url(' + nextImageUrl + ')';
       document.querySelectorAll(".image-background").forEach(function(el) {
         el.style.backgroundImage = style;
@@ -160,18 +160,8 @@ function play() {
   countDownDate.setTime(countDownDate.getTime() + d);
 }
 
-preloadImage();
-
-window.onload = function () {
-  var minutes;
-
-  while (!minutes || minutes < 0) {
-    try {
-      minutes = parseInt(prompt("Please a number of minutes", "120"));
-    } catch(error) {
-    }
-  }
-
+function start(minutes) {
+  isPaused = false;
   display = document.querySelector('#timer');
   startTimer(minutes);
 
@@ -201,4 +191,45 @@ window.onload = function () {
       preloadImage();
     }
   })
+}
+
+window.onload = function () {
+  preloadImage();
+
+  var input = document.querySelector(".form-container input");
+  var button = document.querySelector(".form-container button");
+  var em = document.querySelector(".form-container em");
+
+  input.onkeyup = function() {
+    var minutes = this.value.trim();
+
+    if (input.value != '') {
+      try {
+        minutes = parseInt(minutes);
+        button.classList.remove("hide");
+      } catch(error) {
+        button.classList.add("hide");
+      }
+    } else {
+      button.classList.add("hide");
+    }
+  }
+
+  button.onclick = function() {
+    var minutes = input.value.trim();
+
+    if (minutes == '') {
+      input.classList.add("has-error");
+      return;
+    }
+
+    try {
+      minutes = parseInt(minutes);
+      document.querySelector("body").classList.remove("not-started");
+      start(minutes);
+    } catch(error) {
+      input.classList.add("has-error");
+    }
+
+  }
 };

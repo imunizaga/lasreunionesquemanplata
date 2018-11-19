@@ -13,24 +13,40 @@ gtag('config', 'UA-126446226-1');
     <link rel="stylesheet" type="text/css" href="index.css">
     <link href="https://fonts.googleapis.com/css?family=Indie+Flower" rel="stylesheet">
   </head>
-  <body class="cat">
-    <div id="image-wrapper" class="image-background">
-    </div>
-    <div id="image" class="image-background">
-    </div>
-    <div class="timer-wrapper">
-      <div id="timer">
+  <body class="cat not-started">
+    <div>
+      <div id="image-wrapper" class="image-background">
       </div>
+      <div id="image" class="image-background">
+      </div>
+      <div class="timer-wrapper">
+        <div id="timer">
+        </div>
+      </div>
+      <div id="preload">
+        <img width="1" height="1" alt="Image 01" />
+      </div>
+      <a class="contact-link" href="mailto:cattimer@magnet.cl?Subject=I%20want%20Catimer">
+        ¿Catimer para empresas?
+      </a>
+      <button class="btn btn-pause">
+      </button>
+      <button class="btn btn-dog active btn-shadow">
+      </button>
+      <button class="btn btn-cat btn-shadow">
+      </button>
     </div>
-    <div id="preload">
-      <img width="1" height="1" alt="Image 01" />
-    </div>
-    <button class="btn btn-pause">
-    </button>
-    <button class="btn btn-dog active btn-shadow">
-    </button>
-    <button class="btn btn-cat btn-shadow">
-    </button>
     <script src="index.js"></script>
+    <div class="form-container">
+      <label>
+        Ingresa la cantidad de minutos que quieres esperar
+      </label>
+      <input name="minutes" type="number"/>
+      <em>
+      </em>
+      <button type="button" class="hide">
+        Go!
+      </button>
+    </div>
   </body>
 </html>
