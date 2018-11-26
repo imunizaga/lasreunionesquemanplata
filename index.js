@@ -174,12 +174,26 @@ window.onload = function () {
   var em = document.querySelector(".form-container em");
   var params = (new URL(document.location)).searchParams;
   var qTime = params.get("t");
+  var minutes = 0;
+  var minutesStrings;
 
   if (qTime != '') {
+    minutesStrings  = qTime.trim().split(':');
+
     try {
-      minutes = parseInt(qTime.replace('m', ''));
+      for (var i in minutesStrings) {
+        if (minutesStrings[i].includes('m')) {
+          minutes += parseInt(minutesStrings[i].replace('m', ''));
+        } else if (minutesStrings[i].includes('h')) {
+          minutes += parseInt(minutesStrings[i].replace('h', '')) * 60;
+        } else if (minutesStrings[i].includes('s')) {
+          minutes += parseInt(minutesStrings[i].replace('s', '')) / 60;
+        }
+      }
+
       document.querySelector("body").classList.remove("not-started");
       start(minutes);
+
     } catch(error) {
     }
   } else {
