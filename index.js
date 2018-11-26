@@ -172,24 +172,37 @@ window.onload = function () {
   var input = document.querySelector(".form-container input");
   var button = document.querySelector(".form-container button");
   var em = document.querySelector(".form-container em");
-  input.focus();
+  var params = (new URL(document.location)).searchParams;
+  var qTime = params.get("t");
 
-  input.onkeyup = function() {
-    var minutes = this.value.trim();
-
-    if (arguments[0].keyCode == 13) {
-      onSubmit();
+  if (qTime != '') {
+    try {
+      minutes = parseInt(qTime.replace('m', ''));
+      document.querySelector("body").classList.remove("not-started");
+      start(minutes);
+    } catch(error) {
     }
+  } else {
 
-    if (input.value != '') {
-      try {
-        minutes = parseInt(minutes);
-        button.classList.remove("hide");
-      } catch(error) {
+    input.focus();
+
+    input.onkeyup = function() {
+      var minutes = this.value.trim();
+
+      if (arguments[0].keyCode == 13) {
+        onSubmit();
+      }
+
+      if (input.value != '') {
+        try {
+          minutes = parseInt(minutes);
+          button.classList.remove("hide");
+        } catch(error) {
+          button.classList.add("hide");
+        }
+      } else {
         button.classList.add("hide");
       }
-    } else {
-      button.classList.add("hide");
     }
   }
 
