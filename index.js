@@ -95,16 +95,18 @@ function updateTimer() {
     text += minutes + "m ";
   }
 
+  text += seconds + "s ";
+
   if (milliseconds < 0) {
     if (apiUrl.includes('dog')) {
-      text = text + 'Guau!<br>';
+      text = 'Guau!<br>' + text;
     } else {
-      text = text + 'Miau!<br>';
+      text = 'Miau!<br>' + text;
     }
   }
 
   // Display the result in the element with id="demo"
-  display.innerHTML = text + seconds + "s ";
+  display.innerHTML = text;
 }
 
 function startTimer(minutesDuration) {
