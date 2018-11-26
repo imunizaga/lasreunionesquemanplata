@@ -59,22 +59,18 @@ function updateTimer() {
   // Find the distance between now and the count down date
   var milliseconds = countDownDate - now;
 
+  var roundMethod = Math.floor;
+
   // If the count down is finished, write some text
   if (milliseconds < 0) {
-    clearInterval(interval);
-    if (apiUrl.includes('dog')) {
-      display.innerHTML = 'Guau!';
-    } else {
-      display.innerHTML = 'Miau!';
-    }
-    return;
+    roundMethod = Math.ceil;
   }
 
   // Time calculations for days, hours, minutes and seconds
-  var days = Math.floor(milliseconds / (1000 * 60 * 60 * 24));
-  var hours = Math.floor((milliseconds % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60));
-  var minutes = Math.floor((milliseconds % (1000 * 60 * 60)) / (1000 * 60));
-  var seconds = Math.floor((milliseconds % (1000 * 60)) / 1000);
+  var days = roundMethod(milliseconds / (1000 * 60 * 60 * 24));
+  var hours = roundMethod((milliseconds % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60));
+  var minutes = roundMethod((milliseconds % (1000 * 60 * 60)) / (1000 * 60));
+  var seconds = roundMethod((milliseconds % (1000 * 60)) / 1000);
 
   if (seconds == 55 || !document.querySelector("img").src) {
     preloadImage();
@@ -98,6 +94,15 @@ function updateTimer() {
   if (minutes) {
     text += minutes + "m ";
   }
+
+  if (milliseconds < 0) {
+    if (apiUrl.includes('dog')) {
+      text = text + 'Guau!<br>';
+    } else {
+      text = text + 'Miau!<br>';
+    }
+  }
+
   // Display the result in the element with id="demo"
   display.innerHTML = text + seconds + "s ";
 }
