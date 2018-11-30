@@ -184,7 +184,7 @@ window.onload = function () {
   var minutes = 0;
   var minutesStrings;
 
-  if (qTime != '') {
+  if (qTime != '' && qTime != null) {
     minutesStrings  = qTime.trim().split(':');
 
     try {
