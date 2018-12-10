@@ -231,3 +231,10 @@ a.contact-link {
     text-decoration:none;
     text-shadow: 1px 1px white;
 }
+
+#apiUrl {
+    position: absolute;
+    top: 50%;
+    left: 40%;
+    width: 10px;
+}
