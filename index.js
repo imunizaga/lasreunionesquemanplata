@@ -50,6 +50,9 @@ var finished = false;
 var CAT = 'cat';
 var DOG = 'dog';
 
+// DOM variables
+var apiUrlInput = document.getElementById("apiUrl");
+
 
 function currentApi() {
     if (document.querySelector('body').className.includes('dog')) {
@@ -73,17 +76,14 @@ function finish() {
 }
 
 function copyToClipboard() {
-  /* Get the text field */
-  var copyText = document.getElementById("apiUrl");
-
   /* Select the text field */
-  copyText.select();
+  apiUrlInput.select();
 
   /* Copy the text inside the text field */
   document.execCommand("copy");
 
   /* Alert the copied text */
-  alert("Link a la foto copiada al portapapeles: " + copyText.value);
+  alert("Link a la foto copiada al portapapeles: " + apiUrlInput.value);
 }
 
 
@@ -178,7 +178,7 @@ function preloadImage() {
         el.style.backgroundImage = style;
       });
       updateTimer();
-      document.getElementById("apiUrl").value = nextImageUrl;
+      apiUrlInput.value = nextImageUrl;
     }
 
     document.querySelector("img").src = nextImageUrl;
@@ -191,7 +191,7 @@ function setImage() {
 
   if (nextImageUrl) {
     var style = 'url(' + nextImageUrl + ')';
-    document.getElementById("apiUrl").value = nextImageUrl;
+    apiUrlInput.value = nextImageUrl;
     document.querySelectorAll(".image-background").forEach(function(el) {
       el.style.backgroundImage = style;
     });
