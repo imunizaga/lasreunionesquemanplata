@@ -190,6 +190,17 @@ body.cat .btn-dog{
     border-radius: 50%;
 }
 
+.btn.btn-copy {
+    background-color: black;
+    border-radius: 50%;
+    color: white;
+    font-size: 27px;
+}
+
+.btn.btn-copy {
+    right: 12vw;
+}
+
 @media only screen and (max-width: 990px) {
     .btn {
         height: 10vw;

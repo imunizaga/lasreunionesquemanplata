@@ -46,6 +46,45 @@ var display;
 var interval;
 var isPaused = true;
 var pauseTime = null;
+var finished = false;
+var CAT = 'cat';
+var DOG = 'dog';
+
+
+function currentApi() {
+    if (document.querySelector('body').className.includes('dog')) {
+      return DOG;
+    }
+
+    return CAT;
+}
+
+
+function finish() {
+  var audio;
+  finished = true;
+
+  if (currentApi() == CAT) {
+    audio = new Audio('http://soundbible.com/grab.php?id=1954&type=mp3');
+  } else {
+    audio = new Audio('http://soundbible.com/grab.php?id=75&type=mp3');
+  }
+  audio.play();
+}
+
+function copyToClipboard() {
+  /* Get the text field */
+  var copyText = document.getElementById("apiUrl");
+
+  /* Select the text field */
+  copyText.select();
+
+  /* Copy the text inside the text field */
+  document.execCommand("copy");
+
+  /* Alert the copied text */
+  alert("Link a la foto copiada al portapapeles: " + copyText.value);
+}
 
 
 function updateTimer() {
@@ -64,6 +103,10 @@ function updateTimer() {
   // If the count down is finished, write some text
   if (milliseconds < 0) {
     roundMethod = Math.ceil;
+  }
+
+  if (milliseconds <= 0 && !finished) {
+    finish();
   }
 
   // Time calculations for days, hours, minutes and seconds
@@ -135,6 +178,7 @@ function preloadImage() {
         el.style.backgroundImage = style;
       });
       updateTimer();
+      document.getElementById("apiUrl").value = nextImageUrl;
     }
 
     document.querySelector("img").src = nextImageUrl;
@@ -147,6 +191,7 @@ function setImage() {
 
   if (nextImageUrl) {
     var style = 'url(' + nextImageUrl + ')';
+    document.getElementById("apiUrl").value = nextImageUrl;
     document.querySelectorAll(".image-background").forEach(function(el) {
       el.style.backgroundImage = style;
     });
@@ -249,6 +294,9 @@ window.onload = function () {
 
   document.querySelectorAll('.btn').forEach(function(e) {
     e.onclick = function() {
+      if (this.className.includes('copy')) {
+        return copyToClipboard();
+      }
       if (this.className.includes('play')) {
         this.className = this.className.replace('play', 'pause');
         return play();
@@ -257,7 +305,7 @@ window.onload = function () {
         return pause();
       }
 
-      if (this.className.includes('dog')) {
+      if (currentApi() == CAT) {
         document.querySelector('body').classList.remove('cat');
         document.querySelector('body').classList.add('dog');
         apiUrl = apiUrl.replace('cat', 'dog');
