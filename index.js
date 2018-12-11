@@ -82,6 +82,21 @@ function copyToClipboard() {
   /* Copy the text inside the text field */
   document.execCommand("copy");
 
+  if (navigator && navigator.permissions) {
+    navigator.permissions.query({
+      name: 'clipboard-write'
+    }).then(permissionStatus => {
+      navigator.clipboard.writeText(apiUrlInput.value)
+        .then(() => {
+          console.log('Text copied to clipboard');
+        })
+        .catch(err => {
+          // This can happen if the user denies clipboard permissions:
+          console.error('Could not copy text: ', err);
+        });
+    });
+  }
+
   /* Alert the copied text */
   alert("Link a la foto copiada al portapapeles: " + apiUrlInput.value);
 }
