@@ -210,6 +210,10 @@ body.cat .btn-dog{
     .btn.btn-play, .btn.btn-pause {
         right: 12vw;
     }
+
+    .btn.btn-copy {
+        right: 24vw;
+    }
 }
 
 div#preload { 
