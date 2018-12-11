@@ -165,6 +165,7 @@ function updateTimer() {
 
   // Display the result in the element with id="demo"
   display.innerHTML = text;
+  document.title = text + ' Cattimer!';
 }
 
 function startTimer(minutesDuration) {
