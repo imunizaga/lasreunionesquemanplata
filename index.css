@@ -153,6 +153,7 @@ body.not-started .form-container{
     font-size: 3vw;
     height: 5vw;
     margin: 10px;
+    text-align: center;
     width: 5vw;
 }
 
