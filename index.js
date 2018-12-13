@@ -217,6 +217,11 @@ function setImage() {
 function pause() {
   isPaused = true;
   pauseTime = new Date();
+  var btn = document.querySelector('.btn.btn-pause');
+  btn.className = btn.className.replace('pause', 'play');
+
+  var icon = btn.querySelector('.fa-pause');
+  icon.className = icon.className.replace('pause', 'play');
 }
 
 function play() {
@@ -226,6 +231,12 @@ function play() {
 
   d = now - pauseTime;
   countDownDate.setTime(countDownDate.getTime() + d);
+
+  var btn = document.querySelector('.btn.btn-play');
+  btn.className = btn.className.replace('play', 'pause');
+
+  var icon = btn.querySelector('.fa-play');
+  icon.className = icon.className.replace('play', 'pause');
 }
 
 function start(minutes) {
@@ -314,10 +325,8 @@ window.onload = function () {
         return copyToClipboard();
       }
       if (this.className.includes('play')) {
-        this.className = this.className.replace('play', 'pause');
         return play();
       } else if (this.className.includes('pause')) {
-        this.className = this.className.replace('pause', 'play');
         return pause();
       }
 
