@@ -18,7 +18,10 @@ function ajax_get(url, callback) {
 }
 
 // ---- Cats
-var apiUrl = 'https://api.thecatapi.com/v1/images/search?'
+var catApiUrl = 'https://api.thecatapi.com/v1/images/search?'
+var dogApiUrl = 'https://api.thedogapi.com/v1/images/search?'
+var moneyApiUrl = 'https://66.media.tumblr.com/tumblr_mak6ktGGkA1ru90dzo1_250.gif'
+var apiUrl = catApiUrl;
 
 // ---- Dogs
 //var apiUrl = 'https://api.thedogapi.com/v1/images/search?'
@@ -39,27 +42,76 @@ apiUrl += "mime_type=jpg,png"// just static imagrs
 // Add your API-Key to have access to all the images in the platform, not just the demo ones
 // apiUrl += "YOUR-API-KEY"
 
-var loading = false;
-var nextImageUrl;
-var countDownDate;
-var display;
-var interval;
-var isPaused = true;
-var pauseTime = null;
-var finished = false;
 var CAT = 'cat';
 var DOG = 'dog';
+var MONEY = 'money';
+var countDownDate;
+var display;
+var finished = false;
+var interval;
+var isPaused = true;
+var loading = false;
+var nextImageUrl;
+var pauseTime = null;
+var people;
 
 // DOM variables
 var apiUrlInput = document.getElementById("apiUrl");
 
 
 function currentApi() {
-    if (document.querySelector('body').className.includes('dog')) {
+    if (apiUrl.includes(dogApiUrl)) {
       return DOG;
+    } else if (apiUrl.includes(catApiUrl)) {
+      return CAT;
     }
 
-    return CAT;
+    return MONEY;
+}
+
+function reset() {
+  document.querySelector("body").classList.add("not-started");
+  isPaused = true;
+  display.innerHTML = '';
+  clearInterval(interval);
+}
+
+function setCurrentApi(theme) {
+  var body = document.querySelector('body');
+
+  if (theme == DOG) {
+    if (currentApi() == MONEY && interval) {
+      reset();
+    }
+
+    body.classList.remove('cat');
+    body.classList.remove('money');
+    body.classList.add('dog');
+    apiUrl = dogApiUrl;
+
+  } else if(theme == MONEY) {
+    if (interval) {
+      reset();
+    }
+
+    this.className = 'btn btn-money';
+    body.classList.remove('dog')
+    body.classList.remove('cat');
+    body.classList.add('money')
+    apiUrl = moneyApiUrl;
+
+  } else {
+    if (currentApi() == MONEY && interval) {
+      reset();
+    }
+
+    this.className = 'btn btn-cat';
+    body.classList.remove('dog');
+    body.classList.remove('money');
+    body.classList.add('cat')
+    apiUrl = catApiUrl;
+
+  }
 }
 
 
@@ -75,53 +127,22 @@ function finish() {
   audio.play();
 }
 
-function copyToClipboard() {
-  /* Select the text field */
-  apiUrlInput.select();
-
-  /* Copy the text inside the text field */
-  document.execCommand("copy");
-
-  if (navigator && navigator.permissions) {
-    navigator.permissions.query({
-      name: 'clipboard-write'
-    }).then(permissionStatus => {
-      navigator.clipboard.writeText(apiUrlInput.value)
-        .then(() => {
-          console.log('Text copied to clipboard');
-        })
-        .catch(err => {
-          // This can happen if the user denies clipboard permissions:
-          console.error('Could not copy text: ', err);
-        });
-    });
-  }
-
-  /* Alert the copied text */
-  alert("Link a la foto copiada al portapapeles: " + apiUrlInput.value);
-}
-
-
-function updateTimer() {
-  if (isPaused) {
-    return;
-  }
-
+function getTimerText() {
   // Get todays date and time
   var now = new Date();
 
   // Find the distance between now and the count down date
   var milliseconds = countDownDate - now;
 
+  if (milliseconds <= 0 && !finished) {
+    finish();
+  }
+
   var roundMethod = Math.floor;
 
   // If the count down is finished, write some text
   if (milliseconds < 0) {
     roundMethod = Math.ceil;
-  }
-
-  if (milliseconds <= 0 && !finished) {
-    finish();
   }
 
   // Time calculations for days, hours, minutes and seconds
@@ -163,16 +184,85 @@ function updateTimer() {
     }
   }
 
+  return text;
+}
+
+function getMoneyValue() {
+  // Find the distance between now and the count down date
+  var milliseconds = new Date() - startTime;
+
+  // Time calculations for days, hours, minutes and seconds
+  var value = Math.floor(27500 * people * (milliseconds / (60 * 6)) / 10000);
+
+  if (!document.getElementById("image-wrapper").style.backgroundImage) {
+    setImage();
+  }
+
+  currency = 'CLP'
+
+  if (value > 1000000) {
+    value = Math.round(value / 10000) / 100;
+    currency = 'MM'
+  }
+
+  text = App.utils.thousandSeparator(value) + ' ' + currency;
+
+  return text;
+}
+
+function copyToClipboard() {
+  /* Select the text field */
+  apiUrlInput.select();
+
+  /* Copy the text inside the text field */
+  document.execCommand("copy");
+
+  if (navigator && navigator.permissions) {
+    navigator.permissions.query({
+      name: 'clipboard-write'
+    }).then(permissionStatus => {
+      navigator.clipboard.writeText(apiUrlInput.value)
+        .then(() => {
+          console.log('Text copied to clipboard');
+        })
+        .catch(err => {
+          // This can happen if the user denies clipboard permissions:
+          console.error('Could not copy text: ', err);
+        });
+    });
+  }
+
+  /* Alert the copied text */
+  alert("Link a la foto copiada al portapapeles: " + apiUrlInput.value);
+}
+
+
+function updateTimer() {
+  if (isPaused) {
+    return;
+  }
+
+  if (currentApi() == MONEY) {
+    text = getMoneyValue();
+  } else {
+    text = getTimerText();
+  }
+
   // Display the result in the element with id="demo"
   display.innerHTML = text;
   document.title = text + ' Cattimer!';
 }
 
 function startTimer(minutesDuration) {
-  countDownDate = new Date((new Date()).getTime() + minutesDuration * 60000);
+  if (minutesDuration) {
+    countDownDate = new Date((new Date()).getTime() + minutesDuration * 60000);
+  } else {
+    startTime = new Date();
+  }
 
   updateTimer();
-  interval = setInterval(updateTimer, 500);
+
+  interval = setInterval(updateTimer, 1000);
 }
 
 function preloadImage() {
@@ -181,12 +271,15 @@ function preloadImage() {
   }
   loading = true;
 
-  ajax_get(apiUrl, function(data) {
+  function success(data) {
     loading = false;
 
     nextImageUrl = data[0]["url"];
 
     var img = document.querySelector('img');
+    var imageMissing = !img.src;
+
+    img.src = nextImageUrl;
 
     if (!img.src && !isPaused) {
       var style = 'url(' + nextImageUrl + ')';
@@ -196,10 +289,15 @@ function preloadImage() {
       updateTimer();
       apiUrlInput.value = nextImageUrl;
     }
+  }
 
-    document.querySelector("img").src = nextImageUrl;
-
-  });
+  if (apiUrl == moneyApiUrl) {
+    success([{
+      'url': moneyApiUrl,
+    }]);
+  } else {
+    ajax_get(apiUrl, success);
+  }
 }
 
 function setImage() {
@@ -239,18 +337,81 @@ function play() {
   icon.className = icon.className.replace('play', 'pause');
 }
 
-function start(minutes) {
+function start(value) {
   isPaused = false;
   display = document.querySelector('#timer');
+  var minutes;
+
+  if (currentApi() == MONEY) {
+    people = value;
+  } else {
+    minutes = value;
+  }
+
   startTimer(minutes);
+}
+
+function setupFom(form, onSubmit) {
+  var input = form.querySelector('input');
+  var button = form.querySelector(".setup-form button");
+
+  if (input.offsetParent !== null) {
+    input.focus();
+  }
+
+  input.onkeyup = function() {
+    var minutes = this.value.trim();
+
+    if (input.value != '') {
+      try {
+        minutes = parseInt(minutes);
+        button.classList.remove("hide");
+      } catch(error) {
+        button.classList.add("hide");
+      }
+    } else {
+      button.classList.add("hide");
+    }
+  }
+
+  form.onsubmit = function(e) {
+    e.preventDefault();
+    onSubmit(form);
+  }
+}
+
+function setupMoneyForms(onSubmit) {
+  var form = document.querySelector('.setup-form-money');
+  setupFom(form, onSubmit);
+}
+
+function setupAnimalsForms(onSubmit) {
+  var form = document.querySelector('.setup-form-animals');
+  setupFom(form, onSubmit);
+}
+
+function setupForms() {
+  function onSubmit(form) {
+    var input = form.querySelector('input');
+    var value = input.value.trim();
+
+    try {
+      value = parseInt(value);
+      document.querySelector("body").classList.remove("not-started");
+      start(value);
+    } catch(error) {
+      input.classList.add("has-error");
+    }
+  }
+
+  setupMoneyForms(onSubmit);
+  setupAnimalsForms(onSubmit);
 }
 
 window.onload = function () {
   preloadImage();
 
-  var input = document.querySelector(".form-container input");
-  var button = document.querySelector(".form-container button");
-  var em = document.querySelector(".form-container em");
+  var button = document.querySelector(".setup-form button");
   var params = (new URL(document.location)).searchParams;
   var qTime = params.get("t");
   var minutes = 0;
@@ -276,70 +437,29 @@ window.onload = function () {
     } catch(error) {
     }
   } else {
-
-    input.focus();
-
-    input.onkeyup = function() {
-      var minutes = this.value.trim();
-
-      if (arguments[0].keyCode == 13) {
-        onSubmit();
-      }
-
-      if (input.value != '') {
-        try {
-          minutes = parseInt(minutes);
-          button.classList.remove("hide");
-        } catch(error) {
-          button.classList.add("hide");
-        }
-      } else {
-        button.classList.add("hide");
-      }
-    }
+    setupForms();
   }
-
-  function onSubmit() {
-    var minutes = input.value.trim();
-
-    if (minutes == '') {
-      input.classList.add("has-error");
-      return;
-    }
-
-    try {
-      minutes = parseInt(minutes);
-      document.querySelector("body").classList.remove("not-started");
-      start(minutes);
-    } catch(error) {
-      input.classList.add("has-error");
-    }
-
-  }
-
-  button.onclick = onSubmit;
 
   document.querySelectorAll('.btn').forEach(function(e) {
     e.onclick = function() {
       if (this.className.includes('copy')) {
         return copyToClipboard();
       }
+
       if (this.className.includes('play')) {
         return play();
       } else if (this.className.includes('pause')) {
         return pause();
       }
 
-      if (currentApi() == CAT) {
-        document.querySelector('body').classList.remove('cat');
-        document.querySelector('body').classList.add('dog');
-        apiUrl = apiUrl.replace('cat', 'dog');
+      if (this.className.includes(CAT)) {
+        setCurrentApi(CAT);
+      } else if (this.className.includes(DOG)) {
+        setCurrentApi(DOG);
       } else {
-        this.className = 'btn btn-cat';
-        document.querySelector('body').classList.remove('dog')
-        document.querySelector('body').classList.add('cat')
-        apiUrl = apiUrl.replace('dog', 'cat');
+        setCurrentApi(MONEY);
       }
+
       nextImageUrl = null;
       document.querySelectorAll(".image-background").forEach(function(el) {
         el.style.backgroundImage = '';

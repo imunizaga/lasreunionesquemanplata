@@ -56,11 +56,11 @@ body.cat {
     width: 100%;
 }
 
-body.not-started .form-container{
+body.not-started .setup-form{
     display: flex; /* or inline-flex */
 }
 
-.form-container {
+.setup-form {
     display: none;
     flex-direction: column;
     height: 100%;
@@ -71,13 +71,18 @@ body.not-started .form-container{
     align-items: center;
 }
 
-.form-container label{
-    color: white;
+.setup-form label{
     font-size: 2em;
     max-height: 500px;
+    text-shadow: 1px 1px #FFFFFF;
 }
 
-.form-container input{
+.setup-form.setup-form-animals label{
+    color: white;
+    text-shadow: 1px 1px #000000;
+}
+
+.setup-form input{
     max-width: 100%;
     width: 400px;
     height: calc(2.25rem + 2px);
@@ -94,11 +99,11 @@ body.not-started .form-container{
     padding-left: 25px;
 }
 
-.form-container input.has-error{
+.setup-form input.has-error{
     border-color: #dc3545;
 }
 
-.form-container button{
+.setup-form button{
     margin-top: 10px;
     color: #fff;
     background-color: #28a745;
@@ -150,6 +155,7 @@ body.not-started .form-container{
     border-radius: 50%;
     border: 2px solid white;
     color: white;
+    cursor: pointer;
     font-size: 3vw;
     height: 5vw;
     margin: 10px;
@@ -166,20 +172,43 @@ body.not-started .form-container{
     }
 }
 
-.btn-cat, .btn-dog{
+body.dog .btn-dog{
     display: none;
 }
 
-body.dog .btn-cat{
+body.cat .btn-cat{
+    display: none;
+}
+
+body.money .btn-money{
+    display: none;
+}
+
+.not-started .btn {
+    display: none;
+}
+
+.cat.not-started .btn.btn-money,
+.dog.not-started .btn.btn-money {
     display: inline;
 }
 
-body.cat .btn-dog{
+.money.not-started .btn.btn-cat,
+.money.not-started .btn.btn-dog {
     display: inline;
 }
 
-.not-started .btn{
-    display: none
+body.dog .setup-form-money,
+body.cat .setup-form-money {
+    display: none;
+}
+
+.setup-form .setup-form-money {
+    color: black;
+}
+
+body.money .setup-form-animals {
+    display: none;
 }
 
 div#preload { 

@@ -60,25 +60,36 @@ fbq('track', 'PageView');
         <button class="btn btn-copy">
           <i class="fas fa-copy"></i>
         </button>
-        <button class="btn btn-dog active btn-shadow">
+        <button class="btn btn-dog btn-shadow">
           <i class="fas fa-dog"></i>
+        </button>
+        <button class="btn btn-money btn-shadow">
+          <i class="fas fa-dollar-sign"></i>
         </button>
         <button class="btn btn-cat btn-shadow">
           <i class="fas fa-cat"></i>
         </button>
       </div>
     </div>
+    <script src="app.js"></script>
     <script src="index.js"></script>
-    <div class="form-container">
+    <form class="setup-form setup-form-money">
+      <label>
+        Ingresa la cantidad de personas
+      </label>
+      <input name="count" type="number"/>
+      <button type="submit" class="hide">
+        Go!
+      </button>
+    </form>
+    <form class="setup-form setup-form-animals">
       <label>
         Ingresa la cantidad de minutos
       </label>
-      <input name="minutes" type="number"/>
-      <em>
-      </em>
-      <button type="button" class="hide">
+      <input name="count" type="number"/>
+      <button type="submit" class="hide">
         Go!
       </button>
-    </div>
+    </form>
   </body>
 </html>
