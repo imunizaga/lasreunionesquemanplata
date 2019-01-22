@@ -180,11 +180,20 @@ body.cat .btn-cat{
     display: none;
 }
 
+.d-money {
+    display: none;
+}
+
+body.money .d-money{
+    display: inline;
+}
+
 body.money .btn-money{
     display: none;
 }
 
-.not-started .btn {
+body.not-started .btn,
+body.not-started .d-started {
     display: none;
 }
 
@@ -230,4 +239,17 @@ a.contact-link {
     top: 50%;
     left: 40%;
     width: 10px;
+}
+
+#dashboard {
+    position: absolute;
+    top: 0;
+    right: 0;
+    padding: 5px;
+    margin: 5px;
+    text-align: right;
+    width: 200px;
+    font-size: 40px;
+    color: white;
+    text-shadow: 1px 1px #000000;
 }

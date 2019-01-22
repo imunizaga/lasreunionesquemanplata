@@ -20,8 +20,13 @@ function ajax_get(url, callback) {
 // ---- Cats
 var catApiUrl = 'https://api.thecatapi.com/v1/images/search?'
 var dogApiUrl = 'https://api.thedogapi.com/v1/images/search?'
-var moneyApiUrl = 'https://66.media.tumblr.com/tumblr_mak6ktGGkA1ru90dzo1_250.gif'
+var moneyApiUrl = 'moneyApi';
 var apiUrl = catApiUrl;
+
+var moneyImages = [
+  'https://66.media.tumblr.com/tumblr_mak6ktGGkA1ru90dzo1_250.gif',
+  'https://media1.tenor.com/images/2e6aec2907ac2642aad0efc5e678ed38/tenor.gif'
+];
 
 // ---- Dogs
 //var apiUrl = 'https://api.thedogapi.com/v1/images/search?'
@@ -45,8 +50,10 @@ apiUrl += "mime_type=jpg,png"// just static imagrs
 var CAT = 'cat';
 var DOG = 'dog';
 var MONEY = 'money';
+
 var countDownDate;
 var display;
+var dashboard;
 var finished = false;
 var interval;
 var isPaused = true;
@@ -54,6 +61,10 @@ var loading = false;
 var nextImageUrl;
 var pauseTime = null;
 var people;
+var accumulatedMoney = 0;
+var startTime;
+var lastUpdateTime;
+var millisecondsPassed;
 
 // DOM variables
 var apiUrlInput = document.getElementById("apiUrl");
@@ -73,7 +84,11 @@ function reset() {
   document.querySelector("body").classList.add("not-started");
   isPaused = true;
   display.innerHTML = '';
+  dashboard.innerHTML = '';
   clearInterval(interval);
+
+  people = 0;
+  accumulatedMoney = 0;
 }
 
 function setCurrentApi(theme) {
@@ -111,6 +126,20 @@ function setCurrentApi(theme) {
     body.classList.add('cat')
     apiUrl = catApiUrl;
 
+  }
+}
+
+
+function increasePeople() {
+  people += 1;
+  updateDashboard();
+}
+
+
+function decreasePeople() {
+  if (people > 0) {
+    people -= 1;
+    updateDashboard();
   }
 }
 
@@ -187,12 +216,39 @@ function getTimerText() {
   return text;
 }
 
+function updateDashboard() {
+  // Time calculations for days, hours, minutes and seconds
+  var days = Math.floor(millisecondsPassed / (1000 * 60 * 60 * 24));
+  var hours = Math.floor((millisecondsPassed % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60));
+  var minutes = Math.floor((millisecondsPassed % (1000 * 60 * 60)) / (1000 * 60));
+  var seconds = Math.floor((millisecondsPassed % (1000 * 60)) / 1000);
+
+  var timePassedText;
+
+  if (days > 0) {
+    timePassedText = days + 'D ' + hours + ':H';
+  } else if (hours > 0) {
+    timePassedText = hours + ':' + minutes + ':' + seconds;
+  } else {
+    timePassedText = minutes + ':' + seconds;
+  }
+
+  dashboard.innerHTML = (
+    '<i class="fas fa-user"></i> ' + people +
+    '<br>' +
+    '<i class="fas fa-clock"></i> ' + timePassedText
+  );
+}
+
 function getMoneyValue() {
   // Find the distance between now and the count down date
-  var milliseconds = new Date() - startTime;
+  var milliseconds = new Date() - lastUpdateTime;
+  millisecondsPassed += milliseconds;
+  lastUpdateTime = new Date();
 
   // Time calculations for days, hours, minutes and seconds
   var value = Math.floor(27500 * people * (milliseconds / (60 * 6)) / 10000);
+  accumulatedMoney += value;
 
   if (!document.getElementById("image-wrapper").style.backgroundImage) {
     setImage();
@@ -200,12 +256,14 @@ function getMoneyValue() {
 
   currency = 'CLP'
 
-  if (value > 1000000) {
-    value = Math.round(value / 10000) / 100;
+  if (accumulatedMoney > 1000000) {
+    accumulatedMoney = Math.round(accumulatedMoney / 10000) / 100;
     currency = 'MM'
   }
 
-  text = App.utils.thousandSeparator(value) + ' ' + currency;
+  text = App.utils.thousandSeparator(accumulatedMoney) + ' ' + currency;
+
+  updateDashboard();
 
   return text;
 }
@@ -258,6 +316,8 @@ function startTimer(minutesDuration) {
     countDownDate = new Date((new Date()).getTime() + minutesDuration * 60000);
   } else {
     startTime = new Date();
+    lastUpdateTime = startTime;
+    millisecondsPassed = 0;
   }
 
   updateTimer();
@@ -293,7 +353,7 @@ function preloadImage() {
 
   if (apiUrl == moneyApiUrl) {
     success([{
-      'url': moneyApiUrl,
+      'url': moneyImages[Math.floor(Math.random() * moneyImages.length)],
     }]);
   } else {
     ajax_get(apiUrl, success);
@@ -313,6 +373,8 @@ function setImage() {
 }
 
 function pause() {
+  updateTimer();
+
   isPaused = true;
   pauseTime = new Date();
   var btn = document.querySelector('.btn.btn-pause');
@@ -328,7 +390,13 @@ function play() {
   var now = new Date();
 
   d = now - pauseTime;
-  countDownDate.setTime(countDownDate.getTime() + d);
+
+  if (countDownDate !== undefined) {
+    countDownDate.setTime(countDownDate.getTime() + d);
+  }
+
+  startTime = now;
+  lastUpdateTime = startTime;
 
   var btn = document.querySelector('.btn.btn-play');
   btn.className = btn.className.replace('play', 'pause');
@@ -340,6 +408,7 @@ function play() {
 function start(value) {
   isPaused = false;
   display = document.querySelector('#timer');
+  dashboard = document.querySelector('#dashboard');
   var minutes;
 
   if (currentApi() == MONEY) {
@@ -398,10 +467,12 @@ function setupForms() {
     try {
       value = parseInt(value);
       document.querySelector("body").classList.remove("not-started");
-      start(value);
     } catch(error) {
       input.classList.add("has-error");
+      return;
     }
+
+    start(value);
   }
 
   setupMoneyForms(onSubmit);
@@ -450,6 +521,12 @@ window.onload = function () {
         return play();
       } else if (this.className.includes('pause')) {
         return pause();
+      }
+
+      if (this.className.includes('btn-user-plus')) {
+        return increasePeople();
+      } else if (this.className.includes('btn-user-minus')) {
+        return decreasePeople();
       }
 
       if (this.className.includes(CAT)) {
