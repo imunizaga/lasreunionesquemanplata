@@ -15,7 +15,7 @@ gtag('config', 'UA-126446226-1');
     <link rel="stylesheet" type="text/css" href="index.css">
     <link href="https://fonts.googleapis.com/css?family=Indie+Flower" rel="stylesheet">
     <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.5.0/css/all.css" integrity="sha384-B4dIYHKNBt8Bc12p+WXckhzcICo0wtJAoU8YZTY5qE0Id1GSseTk6S+L3BlXeVIU" crossorigin="anonymous">
-
+    <link href="https://fonts.googleapis.com/css?family=Open+Sans" rel="stylesheet">
 
     <!-- Facebook Pixel Code -->
     <script>
@@ -68,13 +68,16 @@ fbq('track', 'PageView');
         <button class="btn btn-cat btn-shadow">
           <i class="fas fa-cat"></i>
         </button>
+
         <!-- Money values -->
         <button class="btn btn-money btn-shadow">
           <i class="fas fa-dollar-sign"></i>
         </button>
+
         <button class="btn btn-user-plus btn-shadow d-money d-started" type="button">
           <i class="fas fa-user-plus"></i>
         </button>
+
         <button class="btn btn-user-minus btn-shadow d-money d-started" type="button">
           <i class="fas fa-user-minus"></i>
         </button>
@@ -87,6 +90,12 @@ fbq('track', 'PageView');
         Ingresa la cantidad de personas
       </label>
       <input name="count" type="number"/>
+
+      <label>
+        Ingresa la cantidad de minutos que llevan 
+      </label>
+      <input name="minutes" type="number" value="0"/>
+
       <button type="submit" class="hide">
         Go!
       </button>
@@ -95,7 +104,7 @@ fbq('track', 'PageView');
       <label>
         Ingresa la cantidad de minutos
       </label>
-      <input name="count" type="number"/>
+      <input name="minutes" type="number"/>
       <button type="submit" class="hide">
         Go!
       </button>

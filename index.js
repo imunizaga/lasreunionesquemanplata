@@ -1,25 +1,26 @@
-function ajax_get(url, callback) {
+function ajaxGet(url, callback) {
   var xmlhttp = new XMLHttpRequest();
   xmlhttp.onreadystatechange = function() {
     if (xmlhttp.readyState == 4 && xmlhttp.status == 200) {
       console.log('responseText:' + xmlhttp.responseText);
       try {
         var data = JSON.parse(xmlhttp.responseText);
-      } catch(err) {
-        console.log(err.message + " in " + xmlhttp.responseText);
+      } catch (err) {
+        console.log(err.message + ' in ' + xmlhttp.responseText);
         return;
       }
+
       callback(data);
     }
   };
 
-  xmlhttp.open("GET", url, true);
+  xmlhttp.open('GET', url, true);
   xmlhttp.send();
 }
 
 // ---- Cats
-var catApiUrl = 'https://api.thecatapi.com/v1/images/search?'
-var dogApiUrl = 'https://api.thedogapi.com/v1/images/search?'
+var catApiUrl = 'https://api.thecatapi.com/v1/images/search?';
+var dogApiUrl = 'https://api.thedogapi.com/v1/images/search?';
 var moneyApiUrl = 'moneyApi';
 var apiUrl = catApiUrl;
 
@@ -67,17 +68,16 @@ var lastUpdateTime;
 var millisecondsPassed;
 
 // DOM variables
-var apiUrlInput = document.getElementById("apiUrl");
-
+var apiUrlInput = document.getElementById('apiUrl');
 
 function currentApi() {
-    if (apiUrl.includes(dogApiUrl)) {
-      return DOG;
-    } else if (apiUrl.includes(catApiUrl)) {
-      return CAT;
-    }
+  if (apiUrl.includes(dogApiUrl)) {
+    return DOG;
+  } else if (apiUrl.includes(catApiUrl)) {
+    return CAT;
+  }
 
-    return MONEY;
+  return MONEY;
 }
 
 function reset() {
@@ -104,15 +104,15 @@ function setCurrentApi(theme) {
     body.classList.add('dog');
     apiUrl = dogApiUrl;
 
-  } else if(theme == MONEY) {
+  } else if (theme == MONEY) {
     if (interval) {
       reset();
     }
 
     this.className = 'btn btn-money';
-    body.classList.remove('dog')
+    body.classList.remove('dog');
     body.classList.remove('cat');
-    body.classList.add('money')
+    body.classList.add('money');
     apiUrl = moneyApiUrl;
 
   } else {
@@ -123,18 +123,16 @@ function setCurrentApi(theme) {
     this.className = 'btn btn-cat';
     body.classList.remove('dog');
     body.classList.remove('money');
-    body.classList.add('cat')
+    body.classList.add('cat');
     apiUrl = catApiUrl;
 
   }
 }
 
-
 function increasePeople() {
   people += 1;
   updateDashboard();
 }
-
 
 function decreasePeople() {
   if (people > 0) {
@@ -142,7 +140,6 @@ function decreasePeople() {
     updateDashboard();
   }
 }
-
 
 function finish() {
   var audio;
@@ -153,6 +150,7 @@ function finish() {
   } else {
     audio = new Audio('http://soundbible.com/grab.php?id=75&type=mp3');
   }
+
   audio.play();
 }
 
@@ -219,14 +217,21 @@ function getTimerText() {
 function updateDashboard() {
   // Time calculations for days, hours, minutes and seconds
   var days = Math.floor(millisecondsPassed / (1000 * 60 * 60 * 24));
-  var hours = Math.floor((millisecondsPassed % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60));
-  var minutes = Math.floor((millisecondsPassed % (1000 * 60 * 60)) / (1000 * 60));
+  var hours = Math.floor(
+    (millisecondsPassed % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60)
+  );
+  var minutes = Math.floor(
+    (millisecondsPassed % (1000 * 60 * 60)) / (1000 * 60)
+  );
   var seconds = Math.floor((millisecondsPassed % (1000 * 60)) / 1000);
 
   var timePassedText;
 
+  minutes = (minutes > 9 ? '' : '0') + minutes;
+  seconds = (seconds > 9 ? '' : '0') + seconds;
+
   if (days > 0) {
-    timePassedText = days + 'D ' + hours + ':H';
+    timePassedText = days + 'D ' + (hours > 9 ? '' : '0') + hours + ':H';
   } else if (hours > 0) {
     timePassedText = hours + ':' + minutes + ':' + seconds;
   } else {
@@ -250,18 +255,19 @@ function getMoneyValue() {
   var value = Math.floor(27500 * people * (milliseconds / (60 * 6)) / 10000);
   accumulatedMoney += value;
 
-  if (!document.getElementById("image-wrapper").style.backgroundImage) {
+  if (!document.getElementById('image-wrapper').style.backgroundImage) {
     setImage();
   }
 
-  currency = 'CLP'
+  currency = 'CLP';
 
   if (accumulatedMoney > 1000000) {
-    accumulatedMoney = Math.round(accumulatedMoney / 10000) / 100;
-    currency = 'MM'
+    text = App.utils.thousandSeparator(
+      Math.round(accumulatedMoney / 10000) / 100
+    ) + ' MM';
+  } else {
+    text = App.utils.thousandSeparator(accumulatedMoney) + ' ' + currency;
   }
-
-  text = App.utils.thousandSeparator(accumulatedMoney) + ' ' + currency;
 
   updateDashboard();
 
@@ -273,7 +279,7 @@ function copyToClipboard() {
   apiUrlInput.select();
 
   /* Copy the text inside the text field */
-  document.execCommand("copy");
+  document.execCommand('copy');
 
   if (navigator && navigator.permissions) {
     navigator.permissions.query({
@@ -291,9 +297,8 @@ function copyToClipboard() {
   }
 
   /* Alert the copied text */
-  alert("Link a la foto copiada al portapapeles: " + apiUrlInput.value);
-}
-
+  alert('Link a la foto copiada al portapapeles: ' + apiUrlInput.value);
+};
 
 function updateTimer() {
   if (isPaused) {
@@ -311,13 +316,14 @@ function updateTimer() {
   document.title = text + ' Cattimer!';
 }
 
-function startTimer(minutesDuration) {
-  if (minutesDuration) {
-    countDownDate = new Date((new Date()).getTime() + minutesDuration * 60000);
-  } else {
+function startTimer(values) {
+
+  if (currentApi() == MONEY) {
     startTime = new Date();
-    lastUpdateTime = startTime;
+    lastUpdateTime = new Date((new Date()).getTime() - values.minutes * 60000);
     millisecondsPassed = 0;
+  } else {
+    countDownDate = new Date((new Date()).getTime() + values.minutes * 60000);
   }
 
   updateTimer();
@@ -327,14 +333,15 @@ function startTimer(minutesDuration) {
 
 function preloadImage() {
   if (loading) {
-    return
+    return;
   }
+
   loading = true;
 
   function success(data) {
     loading = false;
 
-    nextImageUrl = data[0]["url"];
+    nextImageUrl = data[0].url;
 
     var img = document.querySelector('img');
     var imageMissing = !img.src;
@@ -343,9 +350,10 @@ function preloadImage() {
 
     if (!img.src && !isPaused) {
       var style = 'url(' + nextImageUrl + ')';
-      document.querySelectorAll(".image-background").forEach(function(el) {
+      document.querySelectorAll('.image-background').forEach(function(el) {
         el.style.backgroundImage = style;
       });
+
       updateTimer();
       apiUrlInput.value = nextImageUrl;
     }
@@ -353,10 +361,10 @@ function preloadImage() {
 
   if (apiUrl == moneyApiUrl) {
     success([{
-      'url': moneyImages[Math.floor(Math.random() * moneyImages.length)],
+      url: moneyImages[Math.floor(Math.random() * moneyImages.length)]
     }]);
   } else {
-    ajax_get(apiUrl, success);
+    ajaxGet(apiUrl, success);
   }
 }
 
@@ -366,7 +374,7 @@ function setImage() {
   if (nextImageUrl) {
     var style = 'url(' + nextImageUrl + ')';
     apiUrlInput.value = nextImageUrl;
-    document.querySelectorAll(".image-background").forEach(function(el) {
+    document.querySelectorAll('.image-background').forEach(function(el) {
       el.style.backgroundImage = style;
     });
   }
@@ -405,24 +413,21 @@ function play() {
   icon.className = icon.className.replace('play', 'pause');
 }
 
-function start(value) {
+function start(values) {
   isPaused = false;
   display = document.querySelector('#timer');
   dashboard = document.querySelector('#dashboard');
-  var minutes;
 
   if (currentApi() == MONEY) {
-    people = value;
-  } else {
-    minutes = value;
+    people = values.count;
   }
 
-  startTimer(minutes);
+  startTimer(values);
 }
 
 function setupFom(form, onSubmit) {
   var input = form.querySelector('input');
-  var button = form.querySelector(".setup-form button");
+  var button = form.querySelector('.setup-form button');
 
   if (input.offsetParent !== null) {
     input.focus();
@@ -434,19 +439,20 @@ function setupFom(form, onSubmit) {
     if (input.value != '') {
       try {
         minutes = parseInt(minutes);
-        button.classList.remove("hide");
-      } catch(error) {
-        button.classList.add("hide");
+        button.classList.remove('hide');
+      } catch (error) {
+        button.classList.add('hide');
       }
     } else {
-      button.classList.add("hide");
+      button.classList.add('hide');
     }
-  }
+  };
 
   form.onsubmit = function(e) {
     e.preventDefault();
     onSubmit(form);
-  }
+  };
+
 }
 
 function setupMoneyForms(onSubmit) {
@@ -461,30 +467,46 @@ function setupAnimalsForms(onSubmit) {
 
 function setupForms() {
   function onSubmit(form) {
-    var input = form.querySelector('input');
-    var value = input.value.trim();
+    var formData = new FormData(form);
+    var key;
+    values = {};
 
     try {
-      value = parseInt(value);
-      document.querySelector("body").classList.remove("not-started");
-    } catch(error) {
-      input.classList.add("has-error");
+      for (key of formData.keys()) {
+        values[key] = parseInt(formData.get(key));
+
+        if (isNaN(values[key]) || values[key] === undefined) {
+          form.querySelector(
+            'input[name="' + key + '"]'
+          ).classList.add('has-error');
+
+          return;
+        }
+      }
+
+      document.querySelector('body').classList.remove('not-started');
+
+    } catch (error) {
+      form.querySelector(
+        'input[name="' + key + '"]'
+      ).classList.add('has-error');
+
       return;
     }
 
-    start(value);
+    start(values);
   }
 
   setupMoneyForms(onSubmit);
   setupAnimalsForms(onSubmit);
 }
 
-window.onload = function () {
+window.onload = function() {
   preloadImage();
 
-  var button = document.querySelector(".setup-form button");
+  var button = document.querySelector('.setup-form button');
   var params = (new URL(document.location)).searchParams;
-  var qTime = params.get("t");
+  var qTime = params.get('t');
   var minutes = 0;
   var minutesStrings;
 
@@ -502,10 +524,10 @@ window.onload = function () {
         }
       }
 
-      document.querySelector("body").classList.remove("not-started");
+      document.querySelector('body').classList.remove('not-started');
       start(minutes);
 
-    } catch(error) {
+    } catch (error) {
     }
   } else {
     setupForms();

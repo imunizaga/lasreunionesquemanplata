@@ -242,6 +242,7 @@ a.contact-link {
 }
 
 #dashboard {
+    font-family: 'Open Sans', sans-serif;
     position: absolute;
     top: 0;
     right: 0;
