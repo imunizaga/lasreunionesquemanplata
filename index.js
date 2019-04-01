@@ -26,7 +26,12 @@ var apiUrl = catApiUrl;
 
 var moneyImages = [
   'https://66.media.tumblr.com/tumblr_mak6ktGGkA1ru90dzo1_250.gif',
-  'https://media1.tenor.com/images/2e6aec2907ac2642aad0efc5e678ed38/tenor.gif'
+  'https://i.gifer.com/FU8l.gif',
+  'https://media1.tenor.com/images/2e6aec2907ac2642aad0efc5e678ed38/tenor.gif',
+  'https://media.giphy.com/media/uFtywzELtkFzi/giphy.gif',
+  'https://media.giphy.com/media/gTURHJs4e2Ies/giphy.gif',
+  'https://media.giphy.com/media/YJjvTqoRFgZaM/giphy.gif',
+  'https://media.giphy.com/media/12QCczVAjPAfvi/giphy.gif'
 ];
 
 // ---- Dogs
@@ -40,9 +45,8 @@ var moneyImages = [
 // apiUrl += "size=med&" // medium size
 //apiUrl += "size=small&" // small size
 
-
 // -- formats
-apiUrl += "mime_type=jpg,png"// just static imagrs
+apiUrl += 'mime_type=jpg,png';// just static imagrs
 //apiUrl += "mime_types=gif"// just gifs
 
 // Add your API-Key to have access to all the images in the platform, not just the demo ones
@@ -81,7 +85,7 @@ function currentApi() {
 }
 
 function reset() {
-  document.querySelector("body").classList.add("not-started");
+  document.querySelector('body').classList.add('not-started');
   isPaused = true;
   display.innerHTML = '';
   dashboard.innerHTML = '';
@@ -154,6 +158,17 @@ function finish() {
   audio.play();
 }
 
+function updateImage(seconds) {
+  if (seconds == 55 || !document.querySelector('img').src) {
+    preloadImage();
+  }
+
+  if (seconds == 0 ||
+    !document.getElementById('image-wrapper').style.backgroundImage) {
+    setImage();
+  }
+}
+
 function getTimerText() {
   // Get todays date and time
   var now = new Date();
@@ -174,34 +189,30 @@ function getTimerText() {
 
   // Time calculations for days, hours, minutes and seconds
   var days = roundMethod(milliseconds / (1000 * 60 * 60 * 24));
-  var hours = roundMethod((milliseconds % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60));
+  var hours = roundMethod(
+    (milliseconds % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60)
+  );
   var minutes = roundMethod((milliseconds % (1000 * 60 * 60)) / (1000 * 60));
   var seconds = roundMethod((milliseconds % (1000 * 60)) / 1000);
 
-  if (seconds == 55 || !document.querySelector("img").src) {
-    preloadImage();
-  }
-
-  if (seconds == 0 || !document.getElementById("image-wrapper").style.backgroundImage) {
-    setImage();
-  }
+  updateImage(seconds);
 
   text = '';
 
   if (days) {
-    text = days + "d ";
+    text = days + 'd ';
   }
 
   if (hours) {
-    text += hours + "h ";
+    text += hours + 'h ';
   }
 
   // Display the result in the element with id="demo"
   if (minutes) {
-    text += minutes + "m ";
+    text += minutes + 'm ';
   }
 
-  text += seconds + "s ";
+  text += seconds + 's ';
 
   if (milliseconds < 0) {
     if (apiUrl.includes('dog')) {
@@ -226,6 +237,8 @@ function updateDashboard() {
   var seconds = Math.floor((millisecondsPassed % (1000 * 60)) / 1000);
 
   var timePassedText;
+
+  updateImage(seconds);
 
   minutes = (minutes > 9 ? '' : '0') + minutes;
   seconds = (seconds > 9 ? '' : '0') + seconds;
@@ -560,11 +573,13 @@ window.onload = function() {
       }
 
       nextImageUrl = null;
-      document.querySelectorAll(".image-background").forEach(function(el) {
+      document.querySelectorAll('.image-background').forEach(function(el) {
         el.style.backgroundImage = '';
       });
-      document.querySelector('img').removeAttribute("src");
+
+      document.querySelector('img').removeAttribute('src');
+
       preloadImage();
-    }
+    };
   });
 };
