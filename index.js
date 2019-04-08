@@ -24,16 +24,6 @@ var dogApiUrl = 'https://api.thedogapi.com/v1/images/search?';
 var moneyApiUrl = 'moneyApi';
 var apiUrl = catApiUrl;
 
-var moneyImages = [
-  'https://66.media.tumblr.com/tumblr_mak6ktGGkA1ru90dzo1_250.gif',
-  'https://i.gifer.com/FU8l.gif',
-  'https://media1.tenor.com/images/2e6aec2907ac2642aad0efc5e678ed38/tenor.gif',
-  'https://media.giphy.com/media/uFtywzELtkFzi/giphy.gif',
-  'https://media.giphy.com/media/gTURHJs4e2Ies/giphy.gif',
-  'https://media.giphy.com/media/YJjvTqoRFgZaM/giphy.gif',
-  'https://media.giphy.com/media/12QCczVAjPAfvi/giphy.gif'
-];
-
 // ---- Dogs
 //var apiUrl = 'https://api.thedogapi.com/v1/images/search?'
 
@@ -55,6 +45,7 @@ apiUrl += 'mime_type=jpg,png';// just static imagrs
 var CAT = 'cat';
 var DOG = 'dog';
 var MONEY = 'money';
+var currentTimer;
 
 var countDownDate;
 var display;
@@ -98,38 +89,26 @@ function reset() {
 function setCurrentApi(theme) {
   var body = document.querySelector('body');
 
-  if (theme == DOG) {
-    if (currentApi() == MONEY && interval) {
-      reset();
-    }
-
+  if (theme === DOG) {
     body.classList.remove('cat');
     body.classList.remove('money');
     body.classList.add('dog');
     apiUrl = dogApiUrl;
 
-  } else if (theme == MONEY) {
-    if (interval) {
-      reset();
-    }
-
+  } else if (theme === MONEY) {
     this.className = 'btn btn-money';
+
     body.classList.remove('dog');
     body.classList.remove('cat');
     body.classList.add('money');
     apiUrl = moneyApiUrl;
 
   } else {
-    if (currentApi() == MONEY && interval) {
-      reset();
-    }
-
     this.className = 'btn btn-cat';
     body.classList.remove('dog');
     body.classList.remove('money');
     body.classList.add('cat');
     apiUrl = catApiUrl;
-
   }
 }
 
@@ -318,7 +297,7 @@ function updateTimer() {
     return;
   }
 
-  if (currentApi() == MONEY) {
+  if (currentTimer == MONEY) {
     text = getMoneyValue();
   } else {
     text = getTimerText();
@@ -331,7 +310,7 @@ function updateTimer() {
 
 function startTimer(values) {
 
-  if (currentApi() == MONEY) {
+  if (currentTimer == MONEY) {
     startTime = new Date();
     lastUpdateTime = new Date((new Date()).getTime() - values.minutes * 60000);
     millisecondsPassed = 0;
@@ -431,7 +410,19 @@ function start(values) {
   display = document.querySelector('#timer');
   dashboard = document.querySelector('#dashboard');
 
-  if (currentApi() == MONEY) {
+  if (currentTimer === undefined) {
+    currentTimer = currentApi();
+
+    if (currentTimer !== MONEY) {
+      moneyButtons = document.querySelectorAll('.d-money');
+
+      for (var i = 0; i < moneyButtons.length; i++) {
+        moneyButtons[i].remove();
+      }
+    }
+  }
+
+  if (currentTimer === MONEY) {
     people = values.count;
   }
 
@@ -522,6 +513,7 @@ window.onload = function() {
   var qTime = params.get('t');
   var minutes = 0;
   var minutesStrings;
+  setCurrentApi(CAT);
 
   if (qTime != '' && qTime != null) {
     minutesStrings  = qTime.trim().split(':');
@@ -583,3 +575,4 @@ window.onload = function() {
     };
   });
 };
+
