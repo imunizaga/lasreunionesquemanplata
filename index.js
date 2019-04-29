@@ -307,7 +307,7 @@ function updateTimer() {
 
   // Display the result in the element with id="demo"
   display.innerHTML = text;
-  document.title = text + ' Cattimer!';
+  document.title = text.replace(/<(?:.|\n)*?>/gm, '') + ' Cattimer!';
 }
 
 function startTimer(values) {
