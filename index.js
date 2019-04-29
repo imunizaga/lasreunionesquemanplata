@@ -63,6 +63,7 @@ var accumulatedMoney = 0;
 var startTime;
 var lastUpdateTime;
 var millisecondsPassed;
+var moneyImageIndex = Math.floor(Math.random() * moneyImages.length);
 
 // DOM variables
 var apiUrlInput = document.getElementById('apiUrl');
@@ -132,7 +133,7 @@ function finish() {
 
   if (currentApi() == CAT) {
     audio = new Audio('http://soundbible.com/grab.php?id=1954&type=mp3');
-  } else {
+  } else if (currentApi() == DOG) {
     audio = new Audio('http://soundbible.com/grab.php?id=75&type=mp3');
   }
 
@@ -354,8 +355,11 @@ function preloadImage() {
   }
 
   if (apiUrl == moneyApiUrl) {
+    moneyImageIndex += 1;
+    moneyImageIndex = moneyImageIndex % moneyImages.length;
+
     success([{
-      url: moneyImages[Math.floor(Math.random() * moneyImages.length)]
+      url: moneyImages[moneyImageIndex]
     }]);
   } else {
     ajaxGet(apiUrl, success);

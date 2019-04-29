@@ -1,7 +1,6 @@
 var moneyImages = [
   'http://www.reactiongifs.com/r/tma.gif',
   'https://33.media.tumblr.com/16ef35e512e03d66ad294344a25a8b9a/tumblr_nqkzkyY83f1r4a3zdo2_250.gif',
-  'https://33.media.tumblr.com/16ef35e512e03d66ad294344a25a8b9a/tumblr_nqkzkyY83f1r4a3zdo2_250.gif',
   'https://i.gifer.com/FU8l.gif',
   'https://media.giphy.com/media/12QCczVAjPAfvi/giphy.gif',
   'https://media.giphy.com/media/YJjvTqoRFgZaM/giphy.gif',
