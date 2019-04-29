@@ -172,6 +172,10 @@ body.not-started .setup-form{
     }
 }
 
+.d-none {
+    display: none;
+}
+
 body.dog-theme .btn-dog{
     display: none;
 }

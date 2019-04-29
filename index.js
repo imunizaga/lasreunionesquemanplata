@@ -54,7 +54,9 @@ var finished = false;
 var interval;
 var isPaused = true;
 var loading = false;
+var currentImageUrl;
 var nextImageUrl;
+var prevImageUrl;
 var pauseTime = null;
 var people;
 var accumulatedMoney = 0;
@@ -364,6 +366,16 @@ function setImage() {
   var img = document.querySelector('img');
 
   if (nextImageUrl) {
+    if (currentImageUrl && currentImageUrl != nextImageUrl) {
+      if (!prevImageUrl) {
+        document.querySelector('.btn-backward').classList.remove('d-none');
+      }
+
+      prevImageUrl = currentImageUrl;
+    }
+
+    currentImageUrl = nextImageUrl;
+
     var style = 'url(' + nextImageUrl + ')';
     apiUrlInput.value = nextImageUrl;
     document.querySelectorAll('.image-background').forEach(function(el) {
@@ -551,13 +563,22 @@ window.onload = function() {
         return pause();
       }
 
+      if (this.className.includes('backward')) {
+        nextImageUrl = prevImageUrl;
+        setImage();
+        return;
+      }
+
       if (this.className.includes('btn-user-plus')) {
         return increasePeople();
       } else if (this.className.includes('btn-user-minus')) {
         return decreasePeople();
       }
 
-      if (this.className.includes(CAT)) {
+      if (this.className.includes('forward')) {
+        // do nothing, since what comes restart
+        console.log('reset image');
+      } else if (this.className.includes(CAT)) {
         setCurrentApi(CAT);
       } else if (this.className.includes(DOG)) {
         setCurrentApi(DOG);
