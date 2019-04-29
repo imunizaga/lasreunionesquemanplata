@@ -37,11 +37,11 @@ body {
     background-position: center;
 }
 
-body.dog {
+body.dog-theme {
     background-image: url('img/dog.svg');
 }
 
-body.cat {
+body.cat-theme {
     background-image: url('img/cat.svg');
 }
 
@@ -172,11 +172,11 @@ body.not-started .setup-form{
     }
 }
 
-body.dog .btn-dog{
+body.dog-theme .btn-dog{
     display: none;
 }
 
-body.cat .btn-cat{
+body.cat-theme .btn-cat{
     display: none;
 }
 
@@ -184,11 +184,11 @@ body.cat .btn-cat{
     display: none;
 }
 
-body.money .d-money{
+body.money-timer .d-money{
     display: inline;
 }
 
-body.money .btn-money{
+body.money-theme .btn-money{
     display: none;
 }
 
@@ -197,18 +197,23 @@ body.not-started .d-started {
     display: none;
 }
 
-.cat.not-started .btn.btn-money,
-.dog.not-started .btn.btn-money {
+.cat-theme.not-started .btn.btn-money,
+.dog-theme.not-started .btn.btn-money {
     display: inline;
 }
 
-.money.not-started .btn.btn-cat,
-.money.not-started .btn.btn-dog {
+.money-theme.not-started .btn.btn-cat,
+.dog-theme.not-started .btn.btn-cat {
     display: inline;
 }
 
-body.dog .setup-form-money,
-body.cat .setup-form-money {
+.cat-theme.not-started .btn.btn-dog,
+.money-theme.not-started .btn.btn-dog {
+    display: inline;
+}
+
+body.dog-theme .setup-form-money,
+body.cat-theme .setup-form-money {
     display: none;
 }
 
@@ -216,7 +221,7 @@ body.cat .setup-form-money {
     color: black;
 }
 
-body.money .setup-form-animals {
+body.money-theme .setup-form-animals {
     display: none;
 }
 

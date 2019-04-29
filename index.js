@@ -90,24 +90,24 @@ function setCurrentApi(theme) {
   var body = document.querySelector('body');
 
   if (theme === DOG) {
-    body.classList.remove('cat');
-    body.classList.remove('money');
-    body.classList.add('dog');
+    body.classList.remove('cat-theme');
+    body.classList.remove('money-theme');
+    body.classList.add('dog-theme');
     apiUrl = dogApiUrl;
 
   } else if (theme === MONEY) {
     this.className = 'btn btn-money';
 
-    body.classList.remove('dog');
-    body.classList.remove('cat');
-    body.classList.add('money');
+    body.classList.remove('dog-theme');
+    body.classList.remove('cat-theme');
+    body.classList.add('money-theme');
     apiUrl = moneyApiUrl;
 
   } else {
     this.className = 'btn btn-cat';
-    body.classList.remove('dog');
-    body.classList.remove('money');
-    body.classList.add('cat');
+    body.classList.remove('dog-theme');
+    body.classList.remove('money-theme');
+    body.classList.add('cat-theme');
     apiUrl = catApiUrl;
   }
 }
@@ -412,6 +412,7 @@ function start(values) {
 
   if (currentTimer === undefined) {
     currentTimer = currentApi();
+    document.querySelector('body').classList.add(currentTimer + '-timer');
 
     if (currentTimer !== MONEY) {
       moneyButtons = document.querySelectorAll('.d-money');
