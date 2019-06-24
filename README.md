@@ -1,4 +1,4 @@
-# catimer
+# Las reuniones queman plata
 
-[https://thagat.github.io/catimer/]
+[https://thagat.github.io/lasreunionesquemanplata/]
 
