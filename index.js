@@ -1,51 +1,7 @@
-function ajaxGet(url, callback) {
-  var xmlhttp = new XMLHttpRequest();
-  xmlhttp.onreadystatechange = function() {
-    if (xmlhttp.readyState == 4 && xmlhttp.status == 200) {
-      console.log('responseText:' + xmlhttp.responseText);
-      try {
-        var data = JSON.parse(xmlhttp.responseText);
-      } catch (err) {
-        console.log(err.message + ' in ' + xmlhttp.responseText);
-        return;
-      }
-
-      callback(data);
-    }
-  };
-
-  xmlhttp.open('GET', url, true);
-  xmlhttp.send();
-}
-
-// ---- Cats
-var catApiUrl = 'https://api.thecatapi.com/v1/images/search?';
-var dogApiUrl = 'https://api.thedogapi.com/v1/images/search?';
-var moneyApiUrl = 'moneyApi';
-var apiUrl = catApiUrl;
-
-// ---- Dogs
-//var apiUrl = 'https://api.thedogapi.com/v1/images/search?'
-
-// ---- sizes
-// http://api.giphy.com/v1/gifs/search?api_key=VK7vgk34YgkHXmVaozKWk55AR4uDZ3wH&q=money
-
-// -- sizes
-//apiUrl += "size=full&" // full size
-// apiUrl += "size=med&" // medium size
-//apiUrl += "size=small&" // small size
-
-// -- formats
-apiUrl += 'mime_type=jpg,png';// just static imagrs
-//apiUrl += "mime_types=gif"// just gifs
-
-// Add your API-Key to have access to all the images in the platform, not just the demo ones
-// apiUrl += "YOUR-API-KEY"
-
 var CAT = 'cat';
 var DOG = 'dog';
 var MONEY = 'money';
-var currentTimer;
+var currentTimer = MONEY;
 
 var countDownDate;
 var display;
@@ -55,8 +11,6 @@ var interval;
 var isPaused = true;
 var loading = false;
 var currentImageUrl;
-var nextImageUrl;
-var prevImageUrl;
 var pauseTime = null;
 var people;
 var accumulatedMoney = 0;
@@ -68,16 +22,6 @@ var moneyImageIndex = Math.floor(Math.random() * moneyImages.length);
 // DOM variables
 var apiUrlInput = document.getElementById('apiUrl');
 
-function currentApi() {
-  if (apiUrl.includes(dogApiUrl)) {
-    return DOG;
-  } else if (apiUrl.includes(catApiUrl)) {
-    return CAT;
-  }
-
-  return MONEY;
-}
-
 function reset() {
   document.querySelector('body').classList.add('not-started');
   isPaused = true;
@@ -87,32 +31,6 @@ function reset() {
 
   people = 0;
   accumulatedMoney = 0;
-}
-
-function setCurrentApi(theme) {
-  var body = document.querySelector('body');
-
-  if (theme === DOG) {
-    body.classList.remove('cat-theme');
-    body.classList.remove('money-theme');
-    body.classList.add('dog-theme');
-    apiUrl = dogApiUrl;
-
-  } else if (theme === MONEY) {
-    this.className = 'btn btn-money';
-
-    body.classList.remove('dog-theme');
-    body.classList.remove('cat-theme');
-    body.classList.add('money-theme');
-    apiUrl = moneyApiUrl;
-
-  } else {
-    this.className = 'btn btn-cat';
-    body.classList.remove('dog-theme');
-    body.classList.remove('money-theme');
-    body.classList.add('cat-theme');
-    apiUrl = catApiUrl;
-  }
 }
 
 function increasePeople() {
@@ -128,26 +46,18 @@ function decreasePeople() {
 }
 
 function finish() {
-  var audio;
   finished = true;
-
-  if (currentApi() == CAT) {
-    audio = new Audio('http://soundbible.com/grab.php?id=1954&type=mp3');
-  } else if (currentApi() == DOG) {
-    audio = new Audio('http://soundbible.com/grab.php?id=75&type=mp3');
-  }
-
-  audio.play();
+  themeManager.finish();
 }
 
 function updateImage(seconds) {
   if (seconds == 55 || !document.querySelector('img').src) {
-    preloadImage();
+    themeManager.preloadImage();
   }
 
   if (seconds == 0 ||
     !document.getElementById('image-wrapper').style.backgroundImage) {
-    setImage();
+    themeManager.setImage();
   }
 }
 
@@ -197,7 +107,7 @@ function getTimerText() {
   text += seconds + 's ';
 
   if (milliseconds < 0) {
-    if (apiUrl.includes('dog')) {
+    if (themeManager.currentTheme.url.includes('dog')) {
       text = 'Guau!<br>' + text;
     } else {
       text = 'Miau!<br>' + text;
@@ -251,10 +161,10 @@ function getMoneyValue() {
   accumulatedMoney += value;
 
   if (!document.getElementById('image-wrapper').style.backgroundImage) {
-    setImage();
+    themeManager.setImage();
   }
 
-  currency = 'CLP';
+  currency = form.querySelector('currency-input').value;
 
   if (accumulatedMoney > 1000000) {
     text = App.utils.thousandSeparator(
@@ -324,69 +234,7 @@ function startTimer(values) {
   updateTimer();
 
   interval = setInterval(updateTimer, 1000);
-}
-
-function preloadImage() {
-  if (loading) {
-    return;
-  }
-
-  loading = true;
-
-  function success(data) {
-    loading = false;
-
-    nextImageUrl = data[0].url;
-
-    var img = document.querySelector('img');
-    var imageMissing = !img.src;
-
-    img.src = nextImageUrl;
-
-    if (!img.src && !isPaused) {
-      var style = 'url(' + nextImageUrl + ')';
-      document.querySelectorAll('.image-background').forEach(function(el) {
-        el.style.backgroundImage = style;
-      });
-
-      updateTimer();
-      apiUrlInput.value = nextImageUrl;
-    }
-  }
-
-  if (apiUrl == moneyApiUrl) {
-    moneyImageIndex += 1;
-    moneyImageIndex = moneyImageIndex % moneyImages.length;
-
-    success([{
-      url: moneyImages[moneyImageIndex]
-    }]);
-  } else {
-    ajaxGet(apiUrl, success);
-  }
-}
-
-function setImage() {
-  var img = document.querySelector('img');
-
-  if (nextImageUrl) {
-    if (currentImageUrl && currentImageUrl != nextImageUrl) {
-      if (!prevImageUrl) {
-        document.querySelector('.btn-backward').classList.remove('d-none');
-      }
-
-      prevImageUrl = currentImageUrl;
-    }
-
-    currentImageUrl = nextImageUrl;
-
-    var style = 'url(' + nextImageUrl + ')';
-    apiUrlInput.value = nextImageUrl;
-    document.querySelectorAll('.image-background').forEach(function(el) {
-      el.style.backgroundImage = style;
-    });
-  }
-}
+};
 
 function pause() {
   updateTimer();
@@ -427,7 +275,6 @@ function start(values) {
   dashboard = document.querySelector('#dashboard');
 
   if (currentTimer === undefined) {
-    currentTimer = currentApi();
     document.querySelector('body').classList.add(currentTimer + '-timer');
 
     if (currentTimer !== MONEY) {
@@ -477,12 +324,7 @@ function setupFom(form, onSubmit) {
 }
 
 function setupMoneyForms(onSubmit) {
-  var form = document.querySelector('.setup-form-money');
-  setupFom(form, onSubmit);
-}
-
-function setupAnimalsForms(onSubmit) {
-  var form = document.querySelector('.setup-form-animals');
+  var form = document.querySelector('.setup-form');
   setupFom(form, onSubmit);
 }
 
@@ -519,18 +361,18 @@ function setupForms() {
   }
 
   setupMoneyForms(onSubmit);
-  setupAnimalsForms(onSubmit);
 }
 
 window.onload = function() {
-  preloadImage();
+  themeManager.preloadImage();
 
   var button = document.querySelector('.setup-form button');
   var params = (new URL(document.location)).searchParams;
   var qTime = params.get('t');
   var minutes = 0;
   var minutesStrings;
-  setCurrentApi(CAT);
+
+  themeManager.setTheme(themeManager.themes.money);
 
   if (qTime != '' && qTime != null) {
     minutesStrings  = qTime.trim().split(':');
@@ -547,7 +389,7 @@ window.onload = function() {
       }
 
       document.querySelector('body').classList.remove('not-started');
-      start(minutes);
+      start({minutes: minutes});
 
     } catch (error) {
     }
@@ -568,8 +410,19 @@ window.onload = function() {
       }
 
       if (this.className.includes('backward')) {
-        nextImageUrl = prevImageUrl;
-        setImage();
+        themeManager.showLastImage();
+        return;
+      }
+
+      if (this.className.includes('timer')) {
+        document.querySelector('body').classList.remove('timer-people');
+        document.querySelector('body').classList.add('timer-timer');
+        return;
+      }
+
+      if (this.className.includes('people')) {
+        document.querySelector('body').classList.remove('timer-timer');
+        document.querySelector('body').classList.add('timer-people');
         return;
       }
 
@@ -580,24 +433,14 @@ window.onload = function() {
       }
 
       if (this.className.includes('forward')) {
-        // do nothing, since what comes restart
-        console.log('reset image');
+        themeManager.setTheme(themeManager.currentTheme);
       } else if (this.className.includes(CAT)) {
-        setCurrentApi(CAT);
+        themeManager.setTheme(themeManager.themes.cat);
       } else if (this.className.includes(DOG)) {
-        setCurrentApi(DOG);
+        themeManager.setTheme(themeManager.themes.dog);
       } else {
-        setCurrentApi(MONEY);
+        themeManager.setTheme(themeManager.themes.money);
       }
-
-      nextImageUrl = null;
-      document.querySelectorAll('.image-background').forEach(function(el) {
-        el.style.backgroundImage = '';
-      });
-
-      document.querySelector('img').removeAttribute('src');
-
-      preloadImage();
     };
   });
 };

@@ -71,15 +71,22 @@ body.not-started .setup-form{
     align-items: center;
 }
 
-.setup-form label{
-    font-size: 2em;
-    max-height: 500px;
-    text-shadow: 1px 1px #FFFFFF;
+.setup-form table{
+    margin-left: auto;
+    margin-right: auto;
 }
 
-.setup-form.setup-form-animals label{
-    color: white;
-    text-shadow: 1px 1px #000000;
+.setup-form label{
+    display: block;
+}
+
+.setup-form .inputs-wrapper{
+    background-color: rgba(255, 255, 255, 0.8);
+    font-size: 2em;
+    max-height: 500px;
+    padding: 10px;
+    border-radius: 5px;
+    text-shadow: 1px 1px #FFFFFF;
 }
 
 .setup-form input{
@@ -151,16 +158,18 @@ body.not-started .setup-form{
 }
 
 .btn {
-    background-color: black;
-    border-radius: 50%;
-    border: 2px solid white;
-    color: white;
+    background-color: rgba(255, 255, 255, 0.8);
+    border-radius: 5px;
     cursor: pointer;
-    font-size: 3vw;
-    height: 5vw;
+    font-size: 2em;
     margin: 10px;
-    text-align: center;
-    width: 5vw;
+    max-height: 500px;
+    padding: 10px;
+    text-shadow: 1px 1px #FFFFFF;
+}
+
+.btn:hover {
+    background-color: rgba(255, 255, 255, 0.4);
 }
 
 @media only screen and (max-width: 990px) {
@@ -196,7 +205,6 @@ body.money-theme .btn-money{
     display: none;
 }
 
-body.not-started .btn,
 body.not-started .d-started {
     display: none;
 }
@@ -214,19 +222,6 @@ body.not-started .d-started {
 .cat-theme.not-started .btn.btn-dog,
 .money-theme.not-started .btn.btn-dog {
     display: inline;
-}
-
-body.dog-theme .setup-form-money,
-body.cat-theme .setup-form-money {
-    display: none;
-}
-
-.setup-form .setup-form-money {
-    color: black;
-}
-
-body.money-theme .setup-form-animals {
-    display: none;
 }
 
 div#preload { 
@@ -262,4 +257,8 @@ a.contact-link {
     font-size: 40px;
     color: white;
     text-shadow: 1px 1px #000000;
+}
+
+.text-danger {
+    color: #dc3545;
 }

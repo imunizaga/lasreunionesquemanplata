@@ -1,5 +1,6 @@
 <html>
   <head>
+    <meta charset="utf-8">
     <!-- Global site tag (gtag.js) - Google Analytics -->
     <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
     <script async src="https://www.googletagmanager.com/gtag/js?id=UA-126446226-1"></script>
@@ -36,7 +37,7 @@ fbq('track', 'PageView');
     </noscript>
     <!-- End Facebook Pixel Code -->
   </head>
-  <body class="cat-theme not-started">
+  <body class="cat-theme not-started timer-timer">
     <div>
       <div id="image-wrapper" class="image-background">
         <input type="text" id="apiUrl"/>
@@ -59,25 +60,14 @@ fbq('track', 'PageView');
         <button class="btn btn-backward d-none">
           <i class="fas fa-backward"></i>
         </button>
-        <button class="btn btn-forward">
+        <button class="btn btn-forward d-started">
           <i class="fas fa-forward"></i>
         </button>
-        <button class="btn btn-pause">
+        <button class="btn btn-pause d-started">
           <i class="fas fa-pause"></i>
         </button>
-        <button class="btn btn-copy">
+        <button class="btn btn-copy d-started">
           <i class="fas fa-copy"></i>
-        </button>
-        <button class="btn btn-dog btn-shadow">
-          <i class="fas fa-dog"></i>
-        </button>
-        <button class="btn btn-cat btn-shadow">
-          <i class="fas fa-cat"></i>
-        </button>
-
-        <!-- Money values -->
-        <button class="btn btn-money btn-shadow">
-          <i class="fas fa-dollar-sign"></i>
         </button>
 
         <button class="btn btn-user-plus btn-shadow d-money d-started" type="button">
@@ -91,30 +81,56 @@ fbq('track', 'PageView');
     </div>
     <script src="app.js"></script>
     <script src="assets.js"></script>
+    <script src="base.js"></script>
+    <script src="themes.js"></script>
     <script src="index.js"></script>
-    <form class="setup-form setup-form-money">
-      <label>
-        Ingresa la cantidad de personas
-      </label>
-      <input name="count" type="number"/>
+    <form class="setup-form">
+      <div class="inputs-wrapper">
+        <p>
+        Bienvenido a <span class="text-danger">Las Reuniones Queman Plata</span>
+        <br>
+          Buscamos medir cuanto dinero invertimos en una reunión mientras vemos fotos de gente quemando dinero
+        </p>
 
-      <label>
-        Ingresa la cantidad de minutos que llevan 
-      </label>
-      <input name="minutes" type="number" value="0"/>
+        <table>
+          <tbody>
+            <tr>
+              <td with="50%">
+                <label>
+                  Ingresa tu costo por hora por persona
+                </label>
+                <input name="hourlyCost" type="number" value="1"/>
+              </td>
+              <td with="50%">
+                <label>
+                  Ingresa tu Moneda
+                </label>
+                <input name="currency" type="text" value="UF" class="currency-input"/>
+              </td>
+            </tr>
 
-      <button type="submit" class="hide">
-        Go!
-      </button>
-    </form>
-    <form class="setup-form setup-form-animals">
-      <label>
-        Ingresa la cantidad de minutos
-      </label>
-      <input name="minutes" type="number"/>
-      <button type="submit" class="hide">
-        Go!
-      </button>
+            <tr>
+              <td with="50%">
+                <label>
+                  Ingresa la cantidad de minutos que llevan ya reunidos
+                </label>
+                <input name="count" type="number" value="0"/>
+              </td>
+              <td with="50%">
+                <label>
+                  Ingresa la cantidad de personas en tu reunión
+                </label>
+                <input name="minutes" type="number" value="0"/>
+              </td>
+            </tr>
+
+          </tbody>
+        </table>
+
+        <button type="submit" class="hide">
+          Go!
+        </button>
+      </div>
     </form>
   </body>
 </html>
