@@ -167,10 +167,10 @@ function getMoneyValue() {
   lastUpdateTime = new Date();
 
   // Time calculations for days, hours, minutes and seconds
-  var value = Math.floor(
+  var value = (
     configuration.hourlyCost *
     configuration.peopleCount *
-    (millisecondsPassed / (60 * 6)) / 1000
+    (milliseconds / (60 * 6)) / 1000
   );
   configuration.accumulatedMoney += value;
 
@@ -184,7 +184,7 @@ function getMoneyValue() {
     ) + ' MM';
   } else {
     text = App.utils.thousandSeparator(
-      configuration.accumulatedMoney
+      Math.floor(configuration.accumulatedMoney)
     ) + ' ' + configuration.currency;
   }
 
