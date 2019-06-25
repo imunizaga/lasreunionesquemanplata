@@ -40,10 +40,15 @@ function validateForm() {
   var minutesInput = form.querySelector('input[name="minutes"]');
   var minutes = minutesInput.value.trim();
 
+  var peopleCountInput = form.querySelector('input[name="peopleCount"]');
+  var peopleCount = peopleCountInput.value.trim();
+
   if (minutesInput.value !== '') {
     try {
       minutes = parseInt(minutes);
-      if (minutes > 0) {
+      peopleCount = parseInt(peopleCount);
+
+      if (minutes >= 0 && peopleCount > 0) {
         button.classList.remove('hide');
       } else {
         button.classList.add('hide');
