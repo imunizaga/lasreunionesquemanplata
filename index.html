@@ -83,6 +83,7 @@ fbq('track', 'PageView');
     <script src="assets.js"></script>
     <script src="base.js"></script>
     <script src="themes.js"></script>
+    <script src="form.js"></script>
     <script src="index.js"></script>
     <form class="setup-form">
       <div class="inputs-wrapper">
@@ -97,15 +98,15 @@ fbq('track', 'PageView');
             <tr>
               <td with="50%">
                 <label>
-                  Ingresa tu costo por hora por persona
-                </label>
-                <input name="hourlyCost" type="number" value="1"/>
-              </td>
-              <td with="50%">
-                <label>
                   Ingresa tu Moneda
                 </label>
                 <input name="currency" type="text" value="UF" class="currency-input"/>
+              </td>
+              <td with="50%">
+                <label>
+                  Ingresa tu costo por hora por persona
+                </label>
+                <input name="hourlyCost" type="number" value="1"/>
               </td>
             </tr>
 
@@ -114,13 +115,13 @@ fbq('track', 'PageView');
                 <label>
                   Ingresa la cantidad de minutos que llevan ya reunidos
                 </label>
-                <input name="count" type="number" value="0"/>
+                <input name="minutes" type="number" value="1"/>
               </td>
               <td with="50%">
                 <label>
                   Ingresa la cantidad de personas en tu reunión
                 </label>
-                <input name="minutes" type="number" value="0"/>
+                <input name="peopleCount" type="number" value="1"/>
               </td>
             </tr>
 

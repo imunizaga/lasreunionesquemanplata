@@ -193,10 +193,6 @@ body.cat-theme .btn-cat{
     display: none;
 }
 
-.d-money {
-    display: none;
-}
-
 body.money-timer .d-money{
     display: inline;
 }

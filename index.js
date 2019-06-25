@@ -12,12 +12,11 @@ var isPaused = true;
 var loading = false;
 var currentImageUrl;
 var pauseTime = null;
-var people;
-var accumulatedMoney = 0;
 var startTime;
 var lastUpdateTime;
 var millisecondsPassed;
 var moneyImageIndex = Math.floor(Math.random() * moneyImages.length);
+var configuration;
 
 // DOM variables
 var apiUrlInput = document.getElementById('apiUrl');
@@ -25,22 +24,33 @@ var apiUrlInput = document.getElementById('apiUrl');
 function reset() {
   document.querySelector('body').classList.add('not-started');
   isPaused = true;
-  display.innerHTML = '';
-  dashboard.innerHTML = '';
-  clearInterval(interval);
 
-  people = 0;
-  accumulatedMoney = 0;
+  if (display) {
+    display.innerHTML = '';
+  }
+
+  if (dashboard) {
+    dashboard.innerHTML = '';
+  }
+
+  if (interval) {
+    clearInterval(interval);
+  }
+
+  configuration = {
+    peopleCount: 0,
+    accumulatedMoney: 0
+  }
 }
 
 function increasePeople() {
-  people += 1;
+  configuration.peopleCount += 1;
   updateDashboard();
 }
 
 function decreasePeople() {
-  if (people > 0) {
-    people -= 1;
+  if (configuration.peopleCount > 0) {
+    configuration.peopleCount -= 1;
     updateDashboard();
   }
 }
@@ -144,7 +154,7 @@ function updateDashboard() {
   }
 
   dashboard.innerHTML = (
-    '<i class="fas fa-user"></i> ' + people +
+    '<i class="fas fa-user"></i> ' + configuration.peopleCount +
     '<br>' +
     '<i class="fas fa-clock"></i> ' + timePassedText
   );
@@ -157,21 +167,21 @@ function getMoneyValue() {
   lastUpdateTime = new Date();
 
   // Time calculations for days, hours, minutes and seconds
-  var value = Math.floor(27500 * people * (milliseconds / (60 * 6)) / 10000);
-  accumulatedMoney += value;
+  var value = Math.floor(27500 * configuration.peopleCount * (milliseconds / (60 * 6)) / 10000);
+  configuration.accumulatedMoney += value;
 
   if (!document.getElementById('image-wrapper').style.backgroundImage) {
     themeManager.setImage();
   }
 
-  currency = form.querySelector('currency-input').value;
-
-  if (accumulatedMoney > 1000000) {
+  if (configuration.accumulatedMoney > 1000000) {
     text = App.utils.thousandSeparator(
-      Math.round(accumulatedMoney / 10000) / 100
+      Math.round(configuration.accumulatedMoney / 10000) / 100
     ) + ' MM';
   } else {
-    text = App.utils.thousandSeparator(accumulatedMoney) + ' ' + currency;
+    text = App.utils.thousandSeparator(
+      configuration.accumulatedMoney
+    ) + ' ' + configuration.currency;
   }
 
   updateDashboard();
@@ -223,13 +233,9 @@ function updateTimer() {
 
 function startTimer(values) {
 
-  if (currentTimer == MONEY) {
-    startTime = new Date();
-    lastUpdateTime = new Date((new Date()).getTime() - values.minutes * 60000);
-    millisecondsPassed = 0;
-  } else {
-    countDownDate = new Date((new Date()).getTime() + values.minutes * 60000);
-  }
+  startTime = new Date();
+  lastUpdateTime = new Date((new Date()).getTime() - values.minutes * 60000);
+  millisecondsPassed = 0;
 
   updateTimer();
 
@@ -270,6 +276,9 @@ function play() {
 }
 
 function start(values) {
+  configuration = Object.assign({}, configuration, values);
+
+
   isPaused = false;
   display = document.querySelector('#timer');
   dashboard = document.querySelector('#dashboard');
@@ -286,81 +295,7 @@ function start(values) {
     }
   }
 
-  if (currentTimer === MONEY) {
-    people = values.count;
-  }
-
   startTimer(values);
-}
-
-function setupFom(form, onSubmit) {
-  var input = form.querySelector('input');
-  var button = form.querySelector('.setup-form button');
-
-  if (input.offsetParent !== null) {
-    input.focus();
-  }
-
-  input.onkeyup = function() {
-    var minutes = this.value.trim();
-
-    if (input.value != '') {
-      try {
-        minutes = parseInt(minutes);
-        button.classList.remove('hide');
-      } catch (error) {
-        button.classList.add('hide');
-      }
-    } else {
-      button.classList.add('hide');
-    }
-  };
-
-  form.onsubmit = function(e) {
-    e.preventDefault();
-    onSubmit(form);
-  };
-
-}
-
-function setupMoneyForms(onSubmit) {
-  var form = document.querySelector('.setup-form');
-  setupFom(form, onSubmit);
-}
-
-function setupForms() {
-  function onSubmit(form) {
-    var formData = new FormData(form);
-    var key;
-    values = {};
-
-    try {
-      for (key of formData.keys()) {
-        values[key] = parseInt(formData.get(key));
-
-        if (isNaN(values[key]) || values[key] === undefined) {
-          form.querySelector(
-            'input[name="' + key + '"]'
-          ).classList.add('has-error');
-
-          return;
-        }
-      }
-
-      document.querySelector('body').classList.remove('not-started');
-
-    } catch (error) {
-      form.querySelector(
-        'input[name="' + key + '"]'
-      ).classList.add('has-error');
-
-      return;
-    }
-
-    start(values);
-  }
-
-  setupMoneyForms(onSubmit);
 }
 
 window.onload = function() {
@@ -394,7 +329,8 @@ window.onload = function() {
     } catch (error) {
     }
   } else {
-    setupForms();
+    reset();
+    setupForm();
   }
 
   document.querySelectorAll('.btn').forEach(function(e) {
