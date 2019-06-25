@@ -170,7 +170,7 @@ function getMoneyValue() {
   var value = Math.floor(
     configuration.hourlyCost *
     configuration.peopleCount *
-    (milliseconds / (60 * 6)) / 10000
+    (millisecondsPassed / (60 * 6)) / 1000
   );
   configuration.accumulatedMoney += value;
 
