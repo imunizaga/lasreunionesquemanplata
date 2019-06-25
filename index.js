@@ -167,7 +167,11 @@ function getMoneyValue() {
   lastUpdateTime = new Date();
 
   // Time calculations for days, hours, minutes and seconds
-  var value = Math.floor(27500 * configuration.peopleCount * (milliseconds / (60 * 6)) / 10000);
+  var value = Math.floor(
+    configuration.hourlyCost *
+    configuration.peopleCount *
+    (milliseconds / (60 * 6)) / 10000
+  );
   configuration.accumulatedMoney += value;
 
   if (!document.getElementById('image-wrapper').style.backgroundImage) {
